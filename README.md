@@ -1,8 +1,9 @@
 # Aether
 
 <p align="center">
-  <img height="450" width="750" alt="Horizon Preview" src="https://github.com/user-attachments/assets/73fac96e-457a-4096-9a26-c19b79952d55" />
+  <img height="450" width="750" alt="Horizon Preview" src="https://github.com/user-attachments/assets/314aa96a-6679-4683-927c-29c63ee1319a" />
 </p>
+
 Real-time messaging app with active user presence and smooth synchronization.
 
 ---
