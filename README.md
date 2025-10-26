@@ -4,6 +4,7 @@
   <img height="450" width="750" alt="Horizon Preview" src="https://github.com/user-attachments/assets/73fac96e-457a-4096-9a26-c19b79952d55" />
 </p>
 Real-time messaging app with active user presence and smooth synchronization.
+
 ---
 
 ## Overview
