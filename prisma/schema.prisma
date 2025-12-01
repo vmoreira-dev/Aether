@@ -1,0 +1,37 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String?       @unique
+  cards        Card[]
+  transactions Transaction[]
+}
+
+model Card {
+  id         String   @id @default(cuid())
+  name       String
+  issuer     String
+  annualFee  Int
+  rewards    Json     // category → multiplier rules
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  amount     Float
+  category   String
+  date       DateTime
+  merchant   String?
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+}
