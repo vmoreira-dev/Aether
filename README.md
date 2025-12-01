@@ -1,7 +1,7 @@
 # Aether
-
-Financial insights dashboard for tracking spending, analyzing categories, and optimizing credit-card rewards.
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4cbab3d8-b4ef-4172-b6ce-355150e9d6ab" />
+Financial insights dashboard for tracking spending, analyzing categories, and optimizing credit-card rewards.
+
 
 ---
 
