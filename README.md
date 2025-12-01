@@ -15,7 +15,7 @@ The goal is a fast, modern, and high-clarity dashboard that makes financial deci
 
 ## Live Demo
 
-*(Coming soon)*
+aether.vmoreira.dev
 
 ---
 
