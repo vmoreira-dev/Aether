@@ -9,7 +9,6 @@ Financial insights dashboard for tracking spending, analyzing categories, and op
 Aether delivers a streamlined finance interface focused on clear data visualization and efficient analysis.  
 It helps users understand their spending patterns, review category trends, and identify the best card to use for each purchase based on reward structures.
 
-The goal is a fast, modern, and high-clarity dashboard that makes financial decisions simple.
 
 ---
 
