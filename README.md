@@ -9,7 +9,7 @@
 Aether is a personal finance dashboard focused on isolating signal from financial data.  
 It surfaces spending behavior category distribution and reward efficiency to support clearer decisions.
 
-View https://aether.vmoreira.dev
+[View](https://aether.vmoreira.dev)
 
 ---
 
