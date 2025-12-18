@@ -1,41 +1,32 @@
 # Aether
 
-![Aether — Financial Dashboard UI](./public/assets/aether.webp)
-
-A financial insights dashboard for tracking spending, analyzing trends, and optimizing credit rewards
+![Aether — Financial Dashboard](./public/assets/aether.webp)
 
 ---
 
 ## Overview
 
-Aether is a streamlined personal finance dashboard built for clarity and decision-making. It visualizes spending behavior, category trends, and credit-card reward optimization to give users a real-time financial control layer.
+Aether is a personal finance dashboard focused on isolating signal from financial data.  
+It surfaces spending behavior category distribution and reward efficiency to support clearer decisions.
+
+View https://aether.vmoreira.dev
 
 ---
 
-## Live Demo
+## Analysis
 
-https://aether.vmoreira.dev
+- Spending patterns over time  
+- Category concentration and drift  
+- Credit-card reward efficiency  
+- Trend visibility without clutter  
 
 ---
 
-## Stack
+## Execution
 
 - Next.js  
 - TypeScript  
 - Tailwind CSS  
-- shadcn/ui  
 - Prisma ORM  
 - PostgreSQL  
 - Recharts  
-
----
-
-## Features
-
-- CSV transaction upload with automatic parsing  
-- Editable category detection and management  
-- Monthly spending charts and trend breakdowns  
-- Credit-card reward optimization engine  
-- Detailed card profiles with reward structures  
-- Fully responsive dashboard layout  
-- Modular, scalable codebase  
