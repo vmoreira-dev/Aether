@@ -22,7 +22,7 @@ It surfaces spending behavior category distribution and reward efficiency to sup
 
 ---
 
-## Execution
+## Stack
 
 - Next.js  
 - TypeScript  
