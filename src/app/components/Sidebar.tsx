@@ -1,28 +1,55 @@
-import { FiGrid, FiCreditCard, FiTrendingUp, FiSettings } from "react-icons/fi";
+"use client";
+
+import { FiGrid } from "react-icons/fi";
 
 export default function Sidebar() {
-  const items = [
-    { label: "Dashboard", icon: <FiGrid /> },
-    { label: "Transactions", icon: <FiCreditCard /> },
-    { label: "Insights", icon: <FiTrendingUp /> },
-    { label: "Settings", icon: <FiSettings /> },
-  ];
-
   return (
-    <aside className="w-64 p-6 space-y-6 bg-[var(--glass)] backdrop-blur-xl border-r border-[var(--glass-border)]">
-      <div className="text-2xl font-semibold">Aether</div>
+    <aside
+      className="
+        w-56
+        h-screen
+        bg-black/30
+        backdrop-blur-2xl
+        border-r border-white/10
+        px-6 py-8
+        flex flex-col
+      "
+    >
+      {/* Logo */}
+      <div className="text-2xl font-semibold tracking-wide select-none">
+        Aether
+      </div>
 
-      <nav className="space-y-3">
-        {items.map(i => (
-          <button
-            key={i.label}
-            className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-white/10 transition"
-          >
-            {i.icon}
-            {i.label}
-          </button>
-        ))}
+      {/* Divider */}
+      <div className="mt-6 mb-4 h-px bg-white/10" />
+
+      {/* Dashboard only */}
+      <nav className="flex flex-col gap-2">
+        <div
+          className="
+            flex items-center gap-3 
+            px-3 py-2 
+            rounded-xl text-sm
+            bg-white/10 
+            border border-white/10
+            shadow-[0_10px_40px_rgba(0,0,0,0.15)]
+            select-none
+          "
+        >
+          <span className="text-lg opacity-80">
+            <FiGrid />
+          </span>
+          <span className="opacity-90">Dashboard</span>
+        </div>
       </nav>
+
+      {/* Bottom fade spacer */}
+      <div className="flex-1" />
+
+      {/* Footer */}
+      <div className="text-[10px] opacity-50 tracking-wider">
+        © AETHER
+      </div>
     </aside>
   );
 }

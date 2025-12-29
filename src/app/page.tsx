@@ -3,29 +3,47 @@ import { StatCard } from "./components/StatCard";
 import BarChartCard from "./components/BarChartCard";
 import DonutChartCard from "./components/DonutChartCard";
 import LineChartCard from "./components/LineChartCard";
+import SortableGrid from "./components/SortableGrid";
 
 export default function Page() {
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
 
-      <main className="flex-1 p-10 space-y-6">
-        <h1 className="text-3xl font-semibold">Dashboard</h1>
+      <main className="flex-1 flex justify-center">
+        <div className="max-w-5xl w-full px-6 pt-32 pb-20">
 
-        <div className="grid grid-cols-3 gap-6">
-          <StatCard title="Total Spend" value="$1,950" sub="+2.1% from last month" />
-          <StatCard title="Top Category" value="Groceries" sub="$500 spent" />
-          <StatCard title="Projected Cashback" value="$32" sub="+12.4% this month" />
+          <SortableGrid
+            items={[
+              {
+                id: "stats",
+                node: (
+                  <div className="grid grid-cols-3 gap-6">
+                    <StatCard title="Total Spend" value="$1,950" sub="+2.1% from last month" />
+                    <StatCard title="Top Category" value="Groceries" sub="$500 spent" />
+                    <StatCard title="Projected Cashback" value="$32" sub="+12.4% this month" />
+                  </div>
+                ),
+              },
+              {
+                id: "bar-donut",
+                node: (
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="col-span-2">
+                      <BarChartCard />
+                    </div>
+                    <DonutChartCard />
+                  </div>
+                ),
+              },
+              {
+                id: "line",
+                node: <LineChartCard />,
+              },
+            ]}
+          />
+
         </div>
-
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2">
-            <BarChartCard />
-          </div>
-          <DonutChartCard />
-        </div>
-
-        <LineChartCard />
       </main>
     </div>
   );
