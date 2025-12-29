@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glass: rgba(20,20,25,0.45);
+  --glass-border: rgba(255,255,255,0.12);
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
