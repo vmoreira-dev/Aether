@@ -1,4 +1,4 @@
-"use client";
+
 
 import { FiGrid } from "react-icons/fi";
 

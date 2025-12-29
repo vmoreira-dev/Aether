@@ -21,7 +21,7 @@ function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-xs pointer-events-none">
+    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-xs">
       <div className="opacity-70">{payload[0].payload.name}</div>
       <div className="text-sm font-semibold">
         ${payload[0].value}
@@ -34,15 +34,12 @@ export default function BarChartCard() {
   return (
     <div
       className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6"
-      style={{ height: 280 }}
+      style={{ height: 320 }}
     >
-      <div className="text-sm opacity-70 mb-3">
-        Monthly Spending
-      </div>
+      <div className="text-sm opacity-70 mb-4">Monthly Spending</div>
 
-      {/* 🔒 This container NEVER changes height */}
-      <div style={{ width: "100%", height: "210px" }}>
-        <ResponsiveContainer width="100%" height="100%">
+      <div style={{ width: "100%", height: 240 }}>
+        <ResponsiveContainer>
           <BarChart data={data} barSize={26}>
             <defs>
               <linearGradient id="barFill" x1="0" y1="0" x2="0" y2="1">

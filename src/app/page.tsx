@@ -19,12 +19,25 @@ export default function Page() {
                 id: "stats",
                 node: (
                   <div className="grid grid-cols-3 gap-6">
-                    <StatCard title="Total Spend" value="$1,950" sub="+2.1% from last month" />
-                    <StatCard title="Top Category" value="Groceries" sub="$500 spent" />
-                    <StatCard title="Projected Cashback" value="$32" sub="+12.4% this month" />
+                    <StatCard
+                      title="Total Spend"
+                      value="$1,950"
+                      sub="+2.1% from last month"
+                    />
+                    <StatCard
+                      title="Top Category"
+                      value="Groceries"
+                      sub="$500 spent"
+                    />
+                    <StatCard
+                      title="Projected Cashback"
+                      value="$32"
+                      sub="+12.4% this month"
+                    />
                   </div>
                 ),
               },
+
               {
                 id: "bar-donut",
                 node: (
@@ -36,6 +49,7 @@ export default function Page() {
                   </div>
                 ),
               },
+
               {
                 id: "line",
                 node: <LineChartCard />,
