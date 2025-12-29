@@ -46,10 +46,7 @@ export default function Sidebar() {
       {/* Bottom fade spacer */}
       <div className="flex-1" />
 
-      {/* Footer */}
-      <div className="text-[10px] opacity-50 tracking-wider">
-        © AETHER
-      </div>
+      
     </aside>
   );
 }
