@@ -1,34 +1,36 @@
 "use client";
 
+import React from "react";
 import {
   LineChart,
   Line,
   XAxis,
+  YAxis,
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
 
 const data = [
-  { day: 1, amt: 120 },
-  { day: 2, amt: 180 },
-  { day: 3, amt: 140 },
-  { day: 4, amt: 200 },
-  { day: 5, amt: 160 },
-  { day: 6, amt: 240 },
-  { day: 7, amt: 190 },
-  { day: 8, amt: 210 },
-  { day: 9, amt: 170 },
-  { day: 10, amt: 230 },
+  { day: 1, value: 120 },
+  { day: 2, value: 180 },
+  { day: 3, value: 140 },
+  { day: 4, value: 200 },
+  { day: 5, value: 160 },
+  { day: 6, value: 240 },
+  { day: 7, value: 190 },
+  { day: 8, value: 210 },
+  { day: 9, value: 170 },
+  { day: 10, value: 230 },
 ];
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-xs pointer-events-none">
+    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs pointer-events-none">
       <div className="opacity-70">Day {payload[0].payload.day}</div>
-      <div className="text-sm font-semibold">
+      <div className="text-sm font-semibold text-white">
         ${payload[0].value}
       </div>
     </div>
@@ -38,40 +40,58 @@ function CustomTooltip({ active, payload }: any) {
 export default function LineChartCard() {
   return (
     <div
-      className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6"
+      className="
+        relative
+        rounded-3xl
+        border border-white/12
+        bg-white/[0.04]
+        backdrop-blur-xl
+        shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]
+        px-7 pt-6 pb-4
+      "
       style={{ height: 300 }}
     >
-      <div className="text-sm opacity-70 mb-3">Spending Trends</div>
+      {/* Aether top highlight strip */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-      {/* Fixed-size chart box — zero resizing chaos */}
-      <div style={{ width: "100%", height: "220px" }}>
-        <ResponsiveContainer width="100%" height="100%">
+      <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90 mb-3">
+        Spending Trends
+      </p>
+
+      <div className="w-full h-[220px]">
+        <ResponsiveContainer>
           <LineChart data={data}>
             <defs>
-              <linearGradient id="lineGlow" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.9} />
-                <stop offset="100%" stopColor="#B8C7FF" stopOpacity={0.5} />
+              <linearGradient id="aetherLine" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.95} />
+                <stop offset="100%" stopColor="#B8C7FF" stopOpacity={0.7} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid stroke="rgba(255,255,255,0.05)" />
+            <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
 
             <XAxis
               dataKey="day"
-              stroke="rgba(255,255,255,0.35)"
-              tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 10 }}
-              tickLine={false}
+              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
               axisLine={false}
+              tickLine={false}
+            />
+
+            <YAxis
+              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
             />
 
             <Tooltip cursor={false} content={<CustomTooltip />} />
 
             <Line
               type="monotone"
-              dataKey="amt"
-              stroke="url(#lineGlow)"
+              dataKey="value"
+              stroke="url(#aetherLine)"
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 4, fill: "white" }}
             />
           </LineChart>
         </ResponsiveContainer>

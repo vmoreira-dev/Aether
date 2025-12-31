@@ -1,54 +1,82 @@
+'use client';
 
-
-import { FiGrid } from "react-icons/fi";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { FiGrid, FiSettings, FiUser } from "react-icons/fi";
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
+  const items = [
+    { href: "/", icon: <FiGrid size={18} />, label: "Dashboard" },
+    { href: "/settings", icon: <FiSettings size={18} />, label: "Settings" },
+  ];
+
   return (
     <aside
       className="
-        w-56
         h-screen
-        bg-black/30
-        backdrop-blur-2xl
+        w-[72px]
+        bg-black/40
         border-r border-white/10
-        px-6 py-8
+        backdrop-blur-xl
         flex flex-col
+        items-center
+        py-6
       "
     >
-      {/* Logo */}
-      <div className="text-2xl font-semibold tracking-wide select-none">
-        Aether
+      {/* Brand */}
+      <div className="text-xs font-semibold tracking-wide mb-6 opacity-70">
+        Æ
       </div>
 
-      {/* Divider */}
-      <div className="mt-6 mb-4 h-px bg-white/10" />
+      {/* Nav */}
+      <div className="flex flex-col gap-3 mt-2">
+        {items.map((item) => {
+          const active = pathname === item.href;
 
-      {/* Dashboard only */}
-      <nav className="flex flex-col gap-2">
-        <div
-          className="
-            flex items-center gap-3 
-            px-3 py-2 
-            rounded-xl text-sm
-            bg-white/10 
-            border border-white/10
-            shadow-[0_10px_40px_rgba(0,0,0,0.15)]
-            select-none
-          "
-        >
-          <span className="text-lg opacity-80">
-            <FiGrid />
-          </span>
-          <span className="opacity-90">Dashboard</span>
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`
+                group
+                flex
+                items-center
+                justify-center
+                w-10 h-10
+                rounded-xl
+                border
+                transition
+                ${
+                  active
+                    ? "bg-white/[0.08] border-white/20"
+                    : "bg-white/[0.03] border-white/10 hover:bg-white/[0.06]"
+                }
+              `}
+              title={item.label}
+            >
+              <div
+                className={`
+                  ${
+                    active
+                      ? "text-white"
+                      : "text-white/70 group-hover:text-white"
+                  }
+                `}
+              >
+                {item.icon}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Account — bottom */}
+      <div className="mt-auto mb-3">
+        <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center">
+          <FiUser className="text-white/70" size={18} />
         </div>
-      </nav>
-
-      {/* Bottom fade spacer */}
-      <div className="flex-1" />
-
-      {/* Footer */}
-      <div className="text-[10px] opacity-50 tracking-wider">
-        © AETHER
       </div>
     </aside>
   );

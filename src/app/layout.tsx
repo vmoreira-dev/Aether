@@ -1,26 +1,36 @@
 import "./globals.css";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import Sidebar from "./components/Sidebar";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300","400","500","600","700"],
+  variable: "--font-jakarta",
+});
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className="min-h-screen text-white antialiased">
+      <body className={`min-h-screen text-white antialiased ${plusJakarta.variable}`}>
 
-        {/* === BACKGROUND === */}
+        {/* Background */}
         <div className="fixed inset-0 -z-10">
-          <img
-            src="/backgrounds/aether-mediterranean-dawn.webp"   // ← drop the one you want here
-            className="w-full h-full object-cover select-none"
-            draggable={false}
-          />
-
-          {/* Overlay – we tune this per background */}
           <div className="absolute inset-0 bg-black/45" />
-
-          {/* Optional blue tint for aquatic themes */}
-          {/* <div className="absolute inset-0 bg-blue-500/10 mix-blend-soft-light" /> */}
         </div>
 
-        {children}
+        {/* App Frame */}
+        <div className="flex min-h-screen">
+          <Sidebar />
+
+          <main className="flex-1 flex justify-center items-start">
+            {children}
+          </main>
+        </div>
+
       </body>
     </html>
   );

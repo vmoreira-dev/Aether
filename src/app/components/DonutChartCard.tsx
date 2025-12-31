@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   PieChart,
   Pie,
@@ -9,23 +10,22 @@ import {
 } from "recharts";
 
 const data = [
-  { name: "Entertainment", value: 40 },
-  { name: "Restaurants", value: 30 },
-  { name: "Other", value: 30 },
+  { name: "Dining", value: 35, color: "#FFB84E" },
+  { name: "Groceries", value: 30, color: "#A9B9FF" },
+  { name: "Other", value: 35, color: "#9BA3B7" },
 ];
-
-const total = data.reduce((a, b) => a + b.value, 0);
-
-const colors = ["#FFBC5E", "#8EA2FF", "#6B7280"];
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
+
   const d = payload[0].payload;
 
   return (
-    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-xs pointer-events-none">
+    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs">
       <div className="opacity-70">{d.name}</div>
-      <div className="text-sm font-semibold">{d.value}%</div>
+      <div className="text-sm font-semibold text-white">
+        {d.value}%
+      </div>
     </div>
   );
 }
@@ -33,44 +33,57 @@ function CustomTooltip({ active, payload }: any) {
 export default function DonutChartCard() {
   return (
     <div
-      className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6"
+      className="
+        relative
+        rounded-3xl
+        border border-white/12
+        bg-white/[0.04]
+        backdrop-blur-xl
+        shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]
+        px-7 pt-6 pb-4
+        flex flex-col
+      "
       style={{ height: 320 }}
     >
-      <div className="text-sm opacity-70 mb-4">Category Breakdown</div>
+      {/* Top highlight strip */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-      {/* This wrapper keeps the donut perfectly locked in place */}
-      <div className="relative w-full" style={{ height: 240 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart margin={{ top: 0, left: 0, right: 0, bottom: 0 }}>
+      <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90 mb-3">
+        Category Breakdown
+      </p>
+
+      <div className="flex-1 w-full">
+        <ResponsiveContainer>
+          <PieChart>
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={<CustomTooltip />}
+            />
+
             <Pie
               data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={88}
+              paddingAngle={3}
               dataKey="value"
-              innerRadius={70}
-              outerRadius={95}
-              paddingAngle={2}
-              cornerRadius={6}
-              stroke="rgba(0,0,0,0)"
             >
               {data.map((entry, i) => (
-                <Cell key={i} fill={colors[i]} />
+                <Cell key={i} fill={entry.color} />
               ))}
             </Pie>
-
-            <Tooltip
-              content={<CustomTooltip />}
-              cursor={{ fill: "transparent" }}
-            />
           </PieChart>
         </ResponsiveContainer>
+      </div>
 
-        {/* Center value that NEVER moves */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center">
-            <div className="text-2xl font-semibold">{total}%</div>
-            <div className="text-[10px] opacity-60 tracking-wider">
-              TOTAL
-            </div>
-          </div>
+      {/* Center label */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="text-center">
+          <p className="text-xs text-white/60 tracking-wide">TOTAL</p>
+          <p className="text-2xl font-semibold tracking-tight text-white mt-0.5">
+            100%
+          </p>
         </div>
       </div>
     </div>

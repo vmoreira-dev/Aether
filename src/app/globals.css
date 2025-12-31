@@ -9,6 +9,10 @@
   --glass-border: rgba(255,255,255,0.12);
 }
 
+:root {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+}
+
 body {
   background: #000;
   color: #fff;
@@ -19,6 +23,7 @@ body {
   --background: #ffffff;
   --foreground: #171717;
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -38,4 +43,29 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+body {
+  color: rgba(255,255,255,0.92);
+}
+
+small, .text-xs {
+  color: rgba(255,255,255,0.65);
+}
+
+* {
+  font-family: var(--font-jakarta), system-ui, sans-serif !important;
+}
+
+.recharts-text {
+  font-family: var(--font-jakarta), system-ui, sans-serif !important;
+}
+
+* {
+  font-family: var(--font-jakarta), system-ui, sans-serif !important;
+}
+
+.recharts-text {
+  font-family: var(--font-jakarta), system-ui, sans-serif !important;
 }
