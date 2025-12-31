@@ -1,11 +1,12 @@
 import "./globals.css";
-import { Plus_Jakarta_Sans } from "next/font/google";
 import Sidebar from "./components/Sidebar";
+import { DM_Sans } from "next/font/google";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["300","400","500","600","700"],
-  variable: "--font-jakarta",
+  variable: "--font-app",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -14,18 +15,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`min-h-screen text-white antialiased ${plusJakarta.variable}`}>
+    <html
+      lang="en"
+      className={dmSans.variable}
+      // 👇 alias --font-jakarta so old components still work
+      style={{
+        ["--font-jakarta" as any]: "var(--font-app)",
+      }}
+    >
+      <body className="min-h-screen text-white antialiased font-[var(--font-app)]">
 
         {/* Background */}
         <div className="fixed inset-0 -z-10">
           <div className="absolute inset-0 bg-black/45" />
         </div>
 
-        {/* App Frame */}
+        {/* Frame */}
         <div className="flex min-h-screen">
           <Sidebar />
-
           <main className="flex-1 flex justify-center items-start">
             {children}
           </main>

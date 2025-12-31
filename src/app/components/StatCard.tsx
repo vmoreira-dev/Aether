@@ -27,16 +27,25 @@ export function StatCard({ title, value, sub }: StatCardProps) {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
       <div className="flex flex-col gap-1.5">
-        <p className="text-[15px] font-medium tracking-tight text-white/85">
+        <p
+          className="text-[15px] font-medium tracking-tight text-white/85"
+          style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
+        >
           {title}
         </p>
 
-        <p className="text-4xl font-semibold tracking-[-0.01em] leading-none text-white">
+        <p
+          className="text-4xl font-semibold tracking-[-0.01em] leading-none text-white"
+          style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
+        >
           {value}
         </p>
 
         {sub && (
-          <p className="text-sm text-white/60 pt-1">
+          <p
+            className="text-sm text-white/60 pt-1"
+            style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
+          >
             {sub}
           </p>
         )}
