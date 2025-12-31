@@ -10,8 +10,10 @@ export default function Page() {
     <div className="flex min-h-screen">
       <Sidebar />
 
-      <main className="flex-1 flex justify-center">
-        <div className="max-w-5xl w-full px-6 pt-32 pb-20">
+     <main className="flex-1 flex justify-center items-start">
+  <div className="max-w-6xl w-full px-6 pt-[20vh] pb-24">
+
+
 
           <SortableGrid
             items={[
