@@ -7,10 +7,12 @@ export default function SettingsPage() {
 
       <div
         className="
+          absolute inset-0 rounded-2xl 
+          shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] 
           relative max-w-4xl w-full mx-6 rounded-2xl
           border border-white/25 
-          bg-[rgba(60,100,180,0.22)] 
-          backdrop-blur-2xl
+          bg-[rgba(60,100,180,0.12)]
+          backdrop-blur-xl
           shadow-[0_20px_60px_rgba(0,0,0,0.38)]
           animate-glassFade
         "
