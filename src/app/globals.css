@@ -190,3 +190,9 @@ body {
 .animate-glassFade {
   animation: glassFade .65s cubic-bezier(.25,.46,.45,.94) both;
 }
+
+
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
