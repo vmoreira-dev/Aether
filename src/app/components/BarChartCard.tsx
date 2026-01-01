@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import useCardHoverTilt from "../hooks/useCardHoverTilt";
 
 const data = [
   { name: "Jan", value: 300 },
@@ -33,21 +34,33 @@ function CustomTooltip({ active, payload }: any) {
 }
 
 export default function BarChartCard() {
+  const { style, handleMove, handleLeave } = useCardHoverTilt(320);
+
   return (
     <div
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={style}
       className="
         relative
-        rounded-3xl
-        border border-white/12
-        bg-white/[0.04]
-        backdrop-blur-xl
-        shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]
-        px-7 pt-6 pb-4
+        rounded-2xl
+        border border-white/25
+        bg-white/[0.08]
+        backdrop-blur-2xl
+
+        shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+        before:content-['']
+        before:absolute before:inset-0 before:rounded-2xl
+        before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
+
+        px-8 pt-6 pb-5
+
+        transition-all
+        duration-300
+        ease-[cubic-bezier(.16,1,.3,1)]
       "
-      style={{ height: 320 }}
     >
-      {/* Aether top highlight strip */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
 
       <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90 mb-3">
         Monthly Spending
@@ -57,38 +70,38 @@ export default function BarChartCard() {
         <ResponsiveContainer>
           <BarChart data={data} barSize={32}>
             <CartesianGrid
-              stroke="rgba(255,255,255,0.08)"
+              stroke="rgba(255,255,255,0.12)"
               vertical={false}
             />
 
             <XAxis
               dataKey="name"
-              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
               axisLine={false}
               tickLine={false}
             />
 
             <YAxis
-              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 12 }}
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
               axisLine={false}
               tickLine={false}
             />
 
             <Tooltip
-              cursor={{ fill: "rgba(255,255,255,0.05)" }}
+              cursor={{ fill: "rgba(255,255,255,0.06)" }}
               content={<CustomTooltip />}
             />
 
             <Bar
               dataKey="value"
-              radius={[12, 12, 12, 12]}
+              radius={[10, 10, 10, 10]}
               fill="url(#aetherBar)"
             />
 
             <defs>
               <linearGradient id="aetherBar" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#CDD8FF" stopOpacity="1" />
-                <stop offset="100%" stopColor="#8EA0FF" stopOpacity="0.9" />
+                <stop offset="0%" stopColor="#E6EDFF" stopOpacity="1" />
+                <stop offset="100%" stopColor="#9AB3FF" stopOpacity="0.95" />
               </linearGradient>
             </defs>
           </BarChart>

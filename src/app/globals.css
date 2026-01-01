@@ -4,68 +4,136 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================= */
+/*  PREMIUM TYPOGRAPHY SYSTEM */
+/* ========================= */
+
+/* Display / Headlines / Numbers */
+:root {
+  --font-display: "DM Serif Display", var(--font-jakarta), system-ui, sans-serif;
+
+  /* Body / UI text */
+  --font-body: var(--font-jakarta), system-ui, sans-serif;
+
+  /* Accent palette — strong but elegant */
+  --accent-1: #aee0ff;   /* icy cyan highlight */
+  --accent-2: #ffdcae;   /* soft champagne gold */
+  --ink-strong: rgba(255,255,255,0.96);
+  --ink-medium: rgba(255,255,255,0.80);
+  --ink-soft: rgba(255,255,255,0.65);
+}
+
+/* Base font application */
+* {
+  font-family: var(--font-body) !important;
+}
+
+/* Chart labels */
+.recharts-text {
+  font-family: var(--font-body) !important;
+}
+
+/* ========================= */
+/*  BASE COLORS */
+/* ========================= */
+
 :root {
   --glass: rgba(20,20,25,0.45);
-  --glass-border: rgba(255,255,255,0.12);
-}
+  --glass-border: rgba(255,255,255,0.22);
 
-:root {
-  font-family: var(--font-jakarta), system-ui, sans-serif;
-}
-
-body {
-  background: #000;
-  color: #fff;
-}
-
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink-medium);
 }
 
+/* ========================= */
+/*  TYPOGRAPHY WEIGHT + TONE */
+/* ========================= */
+
+/* Card titles */
+.card-title,
+p.font-\[DMSerifDisplay\],
+.font-\[DMSerifDisplay\] {
+  font-family: var(--font-display) !important;
+  color: var(--ink-strong) !important;
+  letter-spacing: -0.015em;
+}
+
+/* Headline numbers / metrics */
+.metric,
+.text-4xl,
+.text-5xl,
+.text-6xl {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  color: var(--ink-strong) !important;
+}
+
+/* Body content */
+body,
+p,
+span,
+.text-sm,
+.text-xs {
+  font-family: var(--font-body) !important;
+  font-weight: 500;
+  color: var(--ink-medium);
+}
+
+/* Subtle / Secondary */
+small,
+.text-xs {
+  color: var(--ink-soft);
+}
+
+/* ========================= */
+/*  ACCENT COLOR APPLICATION */
+/* ========================= */
+
+/* Accent text utility (optional class you can use) */
+.accent {
+  color: var(--accent-1);
+}
+
+.accent-gold {
+  color: var(--accent-2);
+}
+
+/* Links — soft accent */
+a {
+  color: var(--accent-1);
+}
+
+/* ========================= */
+/*  RECHARTS ACCENTS */
+/* ========================= */
+
+.recharts-default-tooltip {
+  font-family: var(--font-body) !important;
+}
+
+/* Grid lines slightly brighter for bold glass */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(255,255,255,0.16);
+}
+
+/* ========================= */
+/*  CLEANUP */
+/* ========================= */
+
+small,
+.text-xs {
+  color: var(--ink-soft);
+}
 
 body {
-  color: rgba(255,255,255,0.92);
+  color: var(--ink-medium);
 }
 
-small, .text-xs {
-  color: rgba(255,255,255,0.65);
-}
 
-* {
-  font-family: var(--font-jakarta), system-ui, sans-serif !important;
-}
-
-.recharts-text {
-  font-family: var(--font-jakarta), system-ui, sans-serif !important;
-}
-
-* {
-  font-family: var(--font-jakarta), system-ui, sans-serif !important;
-}
-
-.recharts-text {
-  font-family: var(--font-jakarta), system-ui, sans-serif !important;
-}
