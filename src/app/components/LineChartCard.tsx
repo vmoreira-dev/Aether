@@ -64,22 +64,13 @@ export default function LineChartCard() {
       onMouseLeave={handleLeave}
       style={style}
       className="
-        relative
-        rounded-2xl
-        border border-white/25
-        bg-white/[0.08]
-        backdrop-blur-2xl
-
+        relative rounded-2xl border border-white/25
+        bg-white/[0.08] backdrop-blur-2xl
         shadow-[0_25px_80px_rgba(0,0,0,0.55)]
-        before:content-['']
-        before:absolute before:inset-0 before:rounded-2xl
+        before:content-[''] before:absolute before:inset-0 before:rounded-2xl
         before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
-
         px-8 pt-6 pb-5
-
-        transition-all
-        duration-300
-        ease-[cubic-bezier(.16,1,.3,1)]
+        transition-all duration-300 ease-[cubic-bezier(.16,1,.3,1)]
       "
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -92,36 +83,70 @@ export default function LineChartCard() {
         <ResponsiveContainer>
           <LineChart data={data}>
             <defs>
-              <linearGradient id="aetherLine" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.95} />
-                <stop offset="100%" stopColor="#C9D6FF" stopOpacity={0.75} />
+              {/* Animated aurora-style ice gradient */}
+              <linearGradient id="aetherLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#9FBFFF">
+                  <animate
+                    attributeName="offset"
+                    values="-0.2; 1.2"
+                    dur="18s"
+                    repeatCount="indefinite"
+                  />
+                </stop>
+
+                <stop offset="50%" stopColor="#EAF1FF">
+                  <animate
+                    attributeName="offset"
+                    values="0; 1"
+                    dur="18s"
+                    repeatCount="indefinite"
+                  />
+                </stop>
+
+                <stop offset="100%" stopColor="#BFD6FF">
+                  <animate
+                    attributeName="offset"
+                    values="0.2; 1.4"
+                    dur="18s"
+                    repeatCount="indefinite"
+                  />
+                </stop>
               </linearGradient>
             </defs>
 
-            <CartesianGrid stroke="rgba(255,255,255,0.12)" vertical={false} />
+            <CartesianGrid stroke="rgba(255,255,255,0.10)" vertical={false} />
 
             <XAxis
               dataKey="day"
-              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
+              tick={{ fill: "rgba(255,255,255,0.80)", fontSize: 12 }}
               axisLine={false}
               tickLine={false}
             />
 
             <YAxis
-              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
+              tick={{ fill: "rgba(255,255,255,0.80)", fontSize: 12 }}
               axisLine={false}
               tickLine={false}
             />
 
-            <Tooltip cursor={false} content={<CustomTooltip />} />
+            <Tooltip
+              cursor={{ stroke: "rgba(255,255,255,0.22)", strokeWidth: 1 }}
+              content={<CustomTooltip />}
+            />
 
             <Line
               type="monotone"
               dataKey="value"
               stroke="url(#aetherLine)"
-              strokeWidth={2.5}
+              strokeWidth={3}
+              strokeLinecap="round"
               dot={false}
-              activeDot={{ r: 4, fill: "white" }}
+              activeDot={{
+                r: 5,
+                fill: "#FFFFFF",
+                stroke: "rgba(180,205,255,0.5)",
+                strokeWidth: 4,
+              }}
             />
           </LineChart>
         </ResponsiveContainer>

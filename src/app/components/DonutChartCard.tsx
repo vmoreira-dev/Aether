@@ -15,14 +15,33 @@ const ringData = [
   { name: "C", value: 25 },
 ];
 
-function CustomTooltip({ active, payload }: any) {
+function CustomTooltip({ active, payload, coordinate, chartX, chartY }: any) {
   if (!active || !payload?.length) return null;
+
   const d = payload[0].payload;
 
+  // cursor-relative offset so we don’t block the donut center
+  const OFFSET_X = 16;
+  const OFFSET_Y = 10;
+
   return (
-    <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs">
+    <div
+      style={{
+        position: "absolute",
+        left: chartX + OFFSET_X,
+        top: chartY - OFFSET_Y,
+        pointerEvents: "none",
+      }}
+      className="
+        px-3 py-2 rounded-2xl
+        bg-black/80 backdrop-blur-md
+        border border-white/15 text-xs
+      "
+    >
       <div className="opacity-70">{d.name}</div>
-      <div className="text-sm font-semibold text-white">{d.value}%</div>
+      <div className="text-sm font-semibold text-white">
+        {d.value}%
+      </div>
     </div>
   );
 }
@@ -37,14 +56,14 @@ export default function DonutChartCard() {
 
     setStyle({
       height: 320,
-      transform: `rotateX(${(0.5 - y) * 2.5}deg) rotateY(${(x - 0.5) * 2.5}deg) scale(1.01)`
+      transform: `rotateX(${(0.5 - y) * 2.5}deg) rotateY(${(x - 0.5) * 2.5}deg) scale(1.01)`,
     });
   }
 
   function handleLeave() {
     setStyle({
       height: 320,
-      transform: "rotateX(0deg) rotateY(0deg) scale(1)"
+      transform: "rotateX(0deg) rotateY(0deg) scale(1)",
     });
   }
 
@@ -70,30 +89,41 @@ export default function DonutChartCard() {
       </p>
 
       <div className="flex-1 w-full relative">
+
+        {/* center disc */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+          <div className="relative w-[112px] h-[112px] rounded-full bg-[#0b1225]/95 shadow-[0_0_45px_rgba(180,205,255,0.35)]">
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <p className="text-[11px] tracking-[0.18em] text-white/70">
+                TOTAL
+              </p>
+              <p className="text-3xl font-bold tracking-tight text-white mt-1">
+                100%
+              </p>
+            </div>
+          </div>
+        </div>
+
         <ResponsiveContainer>
           <PieChart>
-            <defs>
 
-              {/* Icy Blue */}
+            <defs>
               <linearGradient id="icyBlue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#9DBDFF" />
                 <stop offset="55%" stopColor="#124cb1ff" />
                 <stop offset="100%" stopColor="#FFFFFF" />
               </linearGradient>
 
-              {/* Frost White */}
               <linearGradient id="frostWhite" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#1a66feff" stopOpacity={0.95}/>
-                <stop offset="50%" stopColor="#dfe3eaff" stopOpacity={0.95}/>
-                <stop offset="100%" stopColor="#D8E2F3" stopOpacity={0.95}/>
+                <stop offset="0%" stopColor="#1a66feff" />
+                <stop offset="50%" stopColor="#dfe3ea" />
+                <stop offset="100%" stopColor="#D8E2F3" />
               </linearGradient>
 
-              {/* Snow White (third slice – subtle tone shift) */}
               <linearGradient id="snowWhite" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#FFFFFF" />
                 <stop offset="100%" stopColor="#F3F6FB" />
               </linearGradient>
-
             </defs>
 
             <Tooltip cursor={{ fill: "transparent" }} content={<CustomTooltip />} />
@@ -116,29 +146,9 @@ export default function DonutChartCard() {
               <Cell fill="url(#frostWhite)" />
               <Cell fill="url(#snowWhite)" />
             </Pie>
+
           </PieChart>
         </ResponsiveContainer>
-
-        {/* INNER CORE */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <div
-            className="
-              relative w-[112px] h-[112px] rounded-full
-              bg-[#0b1225]/95
-              shadow-[0_0_45px_rgba(180,205,255,0.35)]
-            "
-          >
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <p className="text-[11px] tracking-[0.18em] text-white/70">
-                TOTAL
-              </p>
-              <p className="text-3xl font-bold tracking-tight text-white mt-1">
-                100%
-              </p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   );
