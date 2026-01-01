@@ -63,7 +63,9 @@ export function StatCard({ title, value, sub }: StatCardProps) {
         {sub && (
           <p
             className="text-sm text-white/70 pt-1"
-            style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
+            style={{
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+            }}
           >
             {sub}
           </p>

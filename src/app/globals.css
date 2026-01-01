@@ -137,3 +137,56 @@ body {
 }
 
 
+@keyframes glassFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-glassFade {
+  animation: glassFade .65s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  transform: scale(0);
+  animation: rippleAnim 600ms ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+@keyframes glassFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+
+.page-fade {
+  will-change: opacity, transform;
+  animation: pageFade .7s cubic-bezier(.16,1,.3,1);
+}
+
+
+.animate-glassFade {
+  animation: glassFade .65s cubic-bezier(.25,.46,.45,.94) both;
+}

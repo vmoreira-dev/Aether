@@ -26,9 +26,9 @@ export default function Sidebar() {
       "
     >
       {/* Brand */}
-      <div className="text-xs font-semibold tracking-wide mb-6 opacity-70">
-        Æ
-      </div>
+      <p className="tracking-[0.18em] text-[14px] text-white/75 font-semibold">
+          Æ
+        </p>
 
       {/* Nav */}
       <div className="flex flex-col gap-3 mt-2">

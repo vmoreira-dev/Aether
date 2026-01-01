@@ -15,28 +15,20 @@ const ringData = [
   { name: "C", value: 25 },
 ];
 
-function CustomTooltip({ active, payload, coordinate, chartX, chartY }: any) {
+function CustomTooltip({ active, payload, chartX, chartY }: any) {
   if (!active || !payload?.length) return null;
 
   const d = payload[0].payload;
-
-  // cursor-relative offset so we don’t block the donut center
-  const OFFSET_X = 16;
-  const OFFSET_Y = 10;
 
   return (
     <div
       style={{
         position: "absolute",
-        left: chartX + OFFSET_X,
-        top: chartY - OFFSET_Y,
+        left: chartX + 16,
+        top: chartY - 10,
         pointerEvents: "none",
       }}
-      className="
-        px-3 py-2 rounded-2xl
-        bg-black/80 backdrop-blur-md
-        border border-white/15 text-xs
-      "
+      className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs"
     >
       <div className="opacity-70">{d.name}</div>
       <div className="text-sm font-semibold text-white">
@@ -90,18 +82,14 @@ export default function DonutChartCard() {
 
       <div className="flex-1 w-full relative">
 
-        {/* center disc */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
-          <div className="relative w-[112px] h-[112px] rounded-full bg-[#0b1225]/95 shadow-[0_0_45px_rgba(180,205,255,0.35)]">
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <p className="text-[11px] tracking-[0.18em] text-white/70">
-                TOTAL
-              </p>
-              <p className="text-3xl font-bold tracking-tight text-white mt-1">
-                100%
-              </p>
-            </div>
-          </div>
+        {/* FLOATING TEXT ONLY — NO DISC */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10 text-center">
+          <p className="text-[11px] tracking-[0.18em] text-white/70">
+            TOTAL
+          </p>
+          <p className="text-3xl font-bold tracking-tight text-white mt-1">
+            100%
+          </p>
         </div>
 
         <ResponsiveContainer>
