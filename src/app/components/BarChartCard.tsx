@@ -9,17 +9,13 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
-  Cell
+  Cell,
 } from "recharts";
 import useCardHoverTilt from "../hooks/useCardHoverTilt";
 
-const data = [
-  { name: "Jan", value: 300 },
-  { name: "Feb", value: 450 },
-  { name: "Mar", value: 500 },
-  { name: "Apr", value: 380 },
-  { name: "May", value: 650 },
-];
+type BarChartCardProps = {
+  data: number[];
+};
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
@@ -34,9 +30,15 @@ function CustomTooltip({ active, payload }: any) {
   );
 }
 
-export default function BarChartCard() {
+export default function BarChartCard({ data }: BarChartCardProps) {
   const { style, handleMove, handleLeave } = useCardHoverTilt(320);
   const [hovered, setHovered] = useState<number | null>(null);
+
+  // transform raw numbers → recharts format
+  const chartData = data.map((value, i) => ({
+    name: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i] ?? `M${i + 1}`,
+    value,
+  }));
 
   return (
     <div
@@ -63,7 +65,7 @@ export default function BarChartCard() {
 
       <div className="h-[240px] w-full">
         <ResponsiveContainer>
-          <BarChart data={data} barSize={32}>
+          <BarChart data={chartData} barSize={32}>
             <CartesianGrid stroke="rgba(255,255,255,0.12)" vertical={false} />
 
             <XAxis
@@ -84,7 +86,6 @@ export default function BarChartCard() {
               content={<CustomTooltip />}
             />
 
-
             <Bar
               dataKey="value"
               radius={[10, 10, 10, 10]}
@@ -94,7 +95,7 @@ export default function BarChartCard() {
               onMouseEnter={(_, i) => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
             >
-              {data.map((_, i) => (
+              {chartData.map((_, i) => (
                 <Cell
                   key={i}
                   fill={i === hovered ? "url(#barHover)" : "url(#barFill)"}

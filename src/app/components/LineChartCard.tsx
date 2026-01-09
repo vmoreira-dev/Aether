@@ -11,25 +11,16 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { day: 1, value: 120 },
-  { day: 2, value: 180 },
-  { day: 3, value: 140 },
-  { day: 4, value: 200 },
-  { day: 5, value: 160 },
-  { day: 6, value: 240 },
-  { day: 7, value: 190 },
-  { day: 8, value: 210 },
-  { day: 9, value: 170 },
-  { day: 10, value: 230 },
-];
+type LineChartCardProps = {
+  data: number[];
+};
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
 
   return (
     <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs pointer-events-none">
-      <div className="opacity-70">Day {payload[0].payload.day}</div>
+      <div className="opacity-70">Point {payload[0].payload.day}</div>
       <div className="text-sm font-semibold text-white">
         ${payload[0].value}
       </div>
@@ -37,7 +28,7 @@ function CustomTooltip({ active, payload }: any) {
   );
 }
 
-export default function LineChartCard() {
+export default function LineChartCard({ data }: LineChartCardProps) {
   const [style, setStyle] = useState<React.CSSProperties>({ height: 300 });
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -57,6 +48,12 @@ export default function LineChartCard() {
       transform: "rotateX(0deg) rotateY(0deg) scale(1)",
     });
   }
+
+  // transform raw numbers → recharts format
+  const chartData = data.map((value, i) => ({
+    day: i + 1,
+    value,
+  }));
 
   return (
     <div
@@ -81,9 +78,8 @@ export default function LineChartCard() {
 
       <div className="w-full h-[220px]">
         <ResponsiveContainer>
-          <LineChart data={data}>
+          <LineChart data={chartData}>
             <defs>
-              {/* Animated aurora-style ice gradient */}
               <linearGradient id="aetherLine" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#9FBFFF">
                   <animate

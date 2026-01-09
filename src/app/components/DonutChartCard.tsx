@@ -81,8 +81,7 @@ export default function DonutChartCard() {
       </p>
 
       <div className="flex-1 w-full relative">
-
-        {/* FLOATING TEXT ONLY — NO DISC */}
+        {/* CENTER LABEL */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10 text-center">
           <p className="text-[11px] tracking-[0.18em] text-white/70">
             TOTAL
@@ -94,7 +93,6 @@ export default function DonutChartCard() {
 
         <ResponsiveContainer>
           <PieChart>
-
             <defs>
               <linearGradient id="icyBlue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#9DBDFF" />
@@ -134,7 +132,6 @@ export default function DonutChartCard() {
               <Cell fill="url(#frostWhite)" />
               <Cell fill="url(#snowWhite)" />
             </Pie>
-
           </PieChart>
         </ResponsiveContainer>
       </div>
