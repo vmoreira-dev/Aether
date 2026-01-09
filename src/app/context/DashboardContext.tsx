@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
+
+/* ——— TYPES ——— */
 
 export type DashboardData = {
   totalSpend: number;
@@ -21,6 +23,8 @@ type DashboardContextType = {
   reset: () => void;
 };
 
+/* ——— CONSTANTS ——— */
+
 const DEFAULT_DATA: DashboardData = {
   totalSpend: 1950,
   topCategory: "Groceries",
@@ -32,54 +36,61 @@ const DEFAULT_DATA: DashboardData = {
 
 const STORAGE_KEY = "aether-dashboard:v1";
 
+/* ——— CONTEXT ——— */
+
 const DashboardContext = createContext<DashboardContextType | null>(null);
+
+/* ——— PROVIDER ——— */
 
 export function DashboardProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [data, setData] = useState<DashboardData>(DEFAULT_DATA);
+  const [data, setData] = useState<DashboardData>(() => {
+    if (typeof window === "undefined") return DEFAULT_DATA;
 
-  /* === HYDRATE ON MOUNT === */
-  useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setData({ ...DEFAULT_DATA, ...parsed });
-      }
-    } catch {
-      // silent fail — corrupted storage should not brick UI
-    }
-  }, []);
+      if (!raw) return DEFAULT_DATA;
 
-  /* === PERSIST ON CHANGE === */
-  useEffect(() => {
+      const parsed = JSON.parse(raw);
+      return { ...DEFAULT_DATA, ...parsed };
+    } catch {
+      return DEFAULT_DATA;
+    }
+  });
+
+  /* ——— PERSIST (WRITE-ONLY) ——— */
+  function persist(next: DashboardData) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      // storage quota / private mode — ignore
+      // ignore quota / private mode
     }
-  }, [data]);
+  }
 
-  /* === SAFE UPDATE API === */
+  /* ——— API ——— */
+
   function update<K extends keyof DashboardData>(
     key: K,
     value: DashboardData[K]
   ) {
-    setData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setData((prev) => {
+      const next = { ...prev, [key]: value };
+      persist(next);
+      return next;
+    });
   }
 
   function replace(next: DashboardData) {
     setData(next);
+    persist(next);
   }
 
   function reset() {
     setData(DEFAULT_DATA);
+    persist(DEFAULT_DATA);
   }
 
   return (
@@ -90,6 +101,8 @@ export function DashboardProvider({
     </DashboardContext.Provider>
   );
 }
+
+/* ——— HOOK ——— */
 
 export function useDashboard() {
   const ctx = useContext(DashboardContext);

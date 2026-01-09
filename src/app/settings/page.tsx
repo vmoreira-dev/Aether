@@ -32,7 +32,7 @@ export default function SettingsPage() {
           </h1>
 
           <p className="text-white/80 text-[15px] mb-10 leading-relaxed">
-            Live control panel — edits propagate instantly.
+            Live control panel
           </p>
 
           <div className="grid grid-cols-2 gap-x-10 gap-y-7">
