@@ -1,10 +1,20 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 /* ——— TYPES ——— */
 
-export type DashboardData = {
+export type DashboardModel = {
+  annualSpend: number;
+  cashbackRate: number;
+  distribution: {
+    cars: number;
+    food: number;
+    travel: number;
+  };
+};
+
+export type DashboardDerived = {
   totalSpend: number;
   topCategory: string;
   categorySpend: number;
@@ -14,27 +24,56 @@ export type DashboardData = {
 };
 
 type DashboardContextType = {
-  data: DashboardData;
-  update: <K extends keyof DashboardData>(
+  model: DashboardModel;
+  data: DashboardDerived;
+  updateModel: <K extends keyof DashboardModel>(
     key: K,
-    value: DashboardData[K]
+    value: DashboardModel[K]
   ) => void;
-  replace: (next: DashboardData) => void;
   reset: () => void;
 };
 
 /* ——— CONSTANTS ——— */
 
-const DEFAULT_DATA: DashboardData = {
-  totalSpend: 1950,
-  topCategory: "Groceries",
-  categorySpend: 500,
-  projectedCashback: 32,
-  monthlySpending: [300, 450, 500, 380, 620],
-  trend: [120, 180, 140, 200, 160, 240, 190, 210, 175],
+const DEFAULT_MODEL: DashboardModel = {
+  annualSpend: 30000,
+  cashbackRate: 0.015,
+  distribution: {
+    cars: 0.4,
+    food: 0.35,
+    travel: 0.25,
+  },
 };
 
-const STORAGE_KEY = "aether-dashboard:v1";
+const STORAGE_KEY = "aether-dashboard:model:v2";
+
+/* ——— DERIVE ——— */
+
+function derive(model: DashboardModel): DashboardDerived {
+  const categorySpend = Object.entries(model.distribution).map(
+    ([key, pct]) => ({
+      key,
+      value: Math.round(model.annualSpend * pct),
+    })
+  );
+
+  const top = categorySpend.sort((a, b) => b.value - a.value)[0];
+
+  return {
+    totalSpend: model.annualSpend,
+    topCategory: top.key,
+    categorySpend: top.value,
+    projectedCashback: Math.round(
+      model.annualSpend * model.cashbackRate
+    ),
+    monthlySpending: Array.from({ length: 5 }, (_, i) =>
+      Math.round((model.annualSpend / 12) * (0.85 + i * 0.08))
+    ),
+    trend: Array.from({ length: 9 }, () =>
+      Math.round(model.annualSpend / 160 + Math.random() * 60)
+    ),
+  };
+}
 
 /* ——— CONTEXT ——— */
 
@@ -47,55 +86,46 @@ export function DashboardProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [data, setData] = useState<DashboardData>(() => {
-    if (typeof window === "undefined") return DEFAULT_DATA;
+  const [model, setModel] = useState<DashboardModel>(() => {
+    if (typeof window === "undefined") return DEFAULT_MODEL;
 
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return DEFAULT_DATA;
-
-      const parsed = JSON.parse(raw);
-      return { ...DEFAULT_DATA, ...parsed };
+      return raw
+        ? { ...DEFAULT_MODEL, ...JSON.parse(raw) }
+        : DEFAULT_MODEL;
     } catch {
-      return DEFAULT_DATA;
+      return DEFAULT_MODEL;
     }
   });
 
-  /* ——— PERSIST (WRITE-ONLY) ——— */
-  function persist(next: DashboardData) {
+  function persist(next: DashboardModel) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // ignore quota / private mode
-    }
+    } catch {}
   }
 
-  /* ——— API ——— */
-
-  function update<K extends keyof DashboardData>(
+  function updateModel<K extends keyof DashboardModel>(
     key: K,
-    value: DashboardData[K]
+    value: DashboardModel[K]
   ) {
-    setData((prev) => {
+    setModel((prev) => {
       const next = { ...prev, [key]: value };
       persist(next);
       return next;
     });
   }
 
-  function replace(next: DashboardData) {
-    setData(next);
-    persist(next);
+  function reset() {
+    setModel(DEFAULT_MODEL);
+    persist(DEFAULT_MODEL);
   }
 
-  function reset() {
-    setData(DEFAULT_DATA);
-    persist(DEFAULT_DATA);
-  }
+  const data = useMemo(() => derive(model), [model]);
 
   return (
     <DashboardContext.Provider
-      value={{ data, update, replace, reset }}
+      value={{ model, data, updateModel, reset }}
     >
       {children}
     </DashboardContext.Provider>
