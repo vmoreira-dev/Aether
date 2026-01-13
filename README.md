@@ -24,9 +24,10 @@ Aether is a personal finance dashboard focused on isolating signal from financia
 
 ## Stack
 
-- Next.js  
-- TypeScript  
-- Tailwind CSS  
-- Prisma ORM  
-- PostgreSQL  
-- Recharts  
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+
+
+
