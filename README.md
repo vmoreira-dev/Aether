@@ -1,8 +1,10 @@
 # Aether
 
 ![Aether — Financial Dashboard](./public/assets/aether_5_4.webp)
-[Live Demo](https://aether.vmoreira.dev)
+
+
 ---
+[Live Demo](https://aether.vmoreira.dev)
 
 ## Overview
 
