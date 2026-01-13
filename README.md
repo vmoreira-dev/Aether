@@ -15,7 +15,7 @@ Aether is a personal finance dashboard focused on isolating signal from financia
 
 ---
 
-## Focus
+## Design
 
 - Spending patterns over time  
 - Category concentration and drift  
