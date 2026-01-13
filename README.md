@@ -6,19 +6,17 @@
 
 ## Overview
 
-Aether is a personal finance dashboard focused on isolating signal from financial data.  
-It surfaces spending behavior category distribution and reward efficiency to support clearer decisions.
+Aether is a personal finance dashboard focused on isolating signal from financial data.
 
-[View](https://aether.vmoreira.dev)
+[Live Demo](https://aether.vmoreira.dev)
 
 ---
 
-## Analysis
+## Focus
 
 - Spending patterns over time  
 - Category concentration and drift  
 - Credit-card reward efficiency  
-- Trend visibility without clutter  
 
 ---
 
