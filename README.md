@@ -15,11 +15,14 @@ Aether is a personal finance dashboard focused on isolating signal from financia
 
 ---
 
+
 ## Design
 
-- Spending patterns over time  
-- Category concentration and drift  
-- Credit-card reward efficiency  
+- Dark, muted colors with soft contrast
+- Panels have a glass-like surface with light blur
+- Motion is subtle and only appears when data changes
+
+
 
 ---
 
