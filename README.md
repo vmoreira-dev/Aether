@@ -1,7 +1,7 @@
 # Aether
 
 ![Aether — Financial Dashboard](./public/assets/aether_5_4.webp)
-
+Personal finance dashboard focused on spending behavior and signal clarity.
 ---
 
 ## Overview
