@@ -2,13 +2,20 @@
 
 import { useState } from "react";
 
-export default function useCardHoverTilt(height: number) {
-  const [style, setStyle] = useState<React.CSSProperties>({ height });
+export default function useCardHoverTilt(height: number = 320) {
+  const [style, setStyle] = useState<React.CSSProperties>({
+    height,
+    transform: "rotateX(0deg) rotateY(0deg) scale(1)",
+  });
 
-  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
+  function handleMove(e: React.MouseEvent<HTMLElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
+
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
 
     setStyle({
       height,
