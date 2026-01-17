@@ -1,8 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { StatCard } from "./components/StatCard";
-
+import StatCard from "./components/StatCard";
 import BarChartCard from "./components/BarChartCard";
 import DonutChartCard from "./components/DonutChartCard";
 import LineChartCard from "./components/LineChartCard";
