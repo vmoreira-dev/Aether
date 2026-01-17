@@ -7,6 +7,9 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
+  type UniqueIdentifier,
+  type DragStartEvent,
+  type DragEndEvent,
 } from "@dnd-kit/core";
 
 import {
@@ -19,7 +22,16 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 
-function SortableCard({ id, children }: any) {
+/* ----------------------------------------
+   Sortable Card Wrapper
+---------------------------------------- */
+
+type SortableCardProps = {
+  id: UniqueIdentifier;
+  children: React.ReactNode;
+};
+
+function SortableCard({ id, children }: SortableCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -39,35 +51,68 @@ function SortableCard({ id, children }: any) {
   );
 }
 
-export default function SortableCardGrid({ items }: any) {
-  const [order, setOrder] = useState(items.map((x: any) => x.id));
-  const [activeId, setActiveId] = useState<string | null>(null);
+/* ----------------------------------------
+   Grid
+---------------------------------------- */
+
+type GridItem = {
+  id: UniqueIdentifier;
+  node: React.ReactNode;
+};
+
+type SortableCardGridProps = {
+  items: GridItem[];
+};
+
+export default function SortableCardGrid({
+  items,
+}: SortableCardGridProps) {
+  const [order, setOrder] = useState<UniqueIdentifier[]>(
+    items.map((x) => x.id)
+  );
+
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(
+    null
+  );
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const activeItem = items.find((x: any) => x.id === activeId);
+  const activeItem = items.find((x) => x.id === activeId);
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    setActiveId(null);
+
+    if (!over || active.id === over.id) return;
+
+    setOrder((prev) => {
+      const from = prev.indexOf(active.id);
+      const to = prev.indexOf(over.id);
+      return arrayMove(prev, from, to);
+    });
+  }
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragStart={(e) => setActiveId(e.active.id)}
-      onDragEnd={(e) => {
-        const { active, over } = e;
-        setActiveId(null);
-        if (!over || active.id === over.id) return;
-
-        setOrder((prev) => {
-          const from = prev.indexOf(active.id);
-          const to = prev.indexOf(over.id);
-          return arrayMove(prev, from, to);
-        });
-      }}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
-      <SortableContext items={order} strategy={rectSortingStrategy}>
+      <SortableContext
+        items={order}
+        strategy={rectSortingStrategy}
+      >
         <div className="grid grid-cols-3 gap-6">
           {order.map((id) => {
-            const block = items.find((x: any) => x.id === id);
+            const block = items.find((x) => x.id === id);
+            if (!block) return null;
+
             return (
               <SortableCard key={id} id={id}>
                 {block.node}
@@ -77,7 +122,7 @@ export default function SortableCardGrid({ items }: any) {
         </div>
       </SortableContext>
 
-      {/* drag ghost — layout stays frozen */}
+      {/* Drag ghost — layout stays frozen */}
       <DragOverlay dropAnimation={null}>
         {activeItem ? (
           <div className="opacity-90 scale-[1.02]">
