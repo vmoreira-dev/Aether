@@ -15,8 +15,17 @@ const ringData = [
   { name: "C", value: 25 },
 ];
 
-function CustomTooltip({ active, payload, chartX, chartY }: any) {
-  if (!active || !payload?.length) return null;
+type TooltipProps = {
+  active?: boolean;
+  payload?: any[];
+  coordinate?: { x: number; y: number };
+};
+
+function CustomTooltip({ active, payload, coordinate }: TooltipProps) {
+  if (!active || !payload?.length || !coordinate) return null;
+
+  const { x, y } = coordinate;
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
 
   const d = payload[0].payload;
 
@@ -24,8 +33,8 @@ function CustomTooltip({ active, payload, chartX, chartY }: any) {
     <div
       style={{
         position: "absolute",
-        left: chartX + 16,
-        top: chartY - 10,
+        left: x + 16,
+        top: y - 10,
         pointerEvents: "none",
       }}
       className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs"
@@ -43,8 +52,12 @@ export default function DonutChartCard() {
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
+
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
 
     setStyle({
       height: 320,
@@ -112,7 +125,10 @@ export default function DonutChartCard() {
               </linearGradient>
             </defs>
 
-            <Tooltip cursor={{ fill: "transparent" }} content={<CustomTooltip />} />
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={<CustomTooltip />}
+            />
 
             <Pie
               data={ringData}
