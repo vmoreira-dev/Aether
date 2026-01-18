@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -9,30 +9,14 @@ import {
   Tooltip,
 } from "recharts";
 
-/* ----------------------------------------
-   Types
----------------------------------------- */
+const ringData = [
+  { name: "A", value: 40 },
+  { name: "B", value: 35 },
+  { name: "C", value: 25 },
+];
 
-interface DonutChartCardProps {
-  categorySpend: number;
-  totalSpend: number;
-}
-
-type TooltipProps = {
-  active?: boolean;
-  payload?: any[];
-  coordinate?: { x: number; y: number };
-};
-
-/* ----------------------------------------
-   Tooltip
----------------------------------------- */
-
-function CustomTooltip({ active, payload, coordinate }: TooltipProps) {
-  if (!active || !payload?.length || !coordinate) return null;
-
-  const { x, y } = coordinate;
-  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+function CustomTooltip({ active, payload, chartX, chartY }: any) {
+  if (!active || !payload?.length) return null;
 
   const d = payload[0].payload;
 
@@ -40,8 +24,8 @@ function CustomTooltip({ active, payload, coordinate }: TooltipProps) {
     <div
       style={{
         position: "absolute",
-        left: x + 16,
-        top: y - 10,
+        left: chartX + 16,
+        top: chartY - 10,
         pointerEvents: "none",
       }}
       className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs"
@@ -54,50 +38,17 @@ function CustomTooltip({ active, payload, coordinate }: TooltipProps) {
   );
 }
 
-/* ----------------------------------------
-   Component
----------------------------------------- */
-
-export default function DonutChartCard({
-  categorySpend,
-  totalSpend,
-}: DonutChartCardProps) {
-  const [style, setStyle] = useState<React.CSSProperties>({
-    height: 320,
-  });
-
-  // Build chart data from props
-  const ringData = useMemo(() => {
-    if (!totalSpend) return [];
-
-    return [
-      {
-        name: "Category",
-        value: Math.round((categorySpend / totalSpend) * 100),
-      },
-      {
-        name: "Remaining",
-        value:
-          100 -
-          Math.round((categorySpend / totalSpend) * 100),
-      },
-    ];
-  }, [categorySpend, totalSpend]);
+export default function DonutChartCard() {
+  const [style, setStyle] = useState<React.CSSProperties>({ height: 320 });
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
 
-    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-
     setStyle({
       height: 320,
-      transform: `rotateX(${(0.5 - y) * 2.5}deg) rotateY(${
-        (x - 0.5) * 2.5
-      }deg) scale(1.01)`,
+      transform: `rotateX(${(0.5 - y) * 2.5}deg) rotateY(${(x - 0.5) * 2.5}deg) scale(1.01)`,
     });
   }
 
@@ -136,7 +87,7 @@ export default function DonutChartCard({
             TOTAL
           </p>
           <p className="text-3xl font-bold tracking-tight text-white mt-1">
-            {totalSpend}
+            100%
           </p>
         </div>
 
@@ -149,16 +100,19 @@ export default function DonutChartCard({
                 <stop offset="100%" stopColor="#FFFFFF" />
               </linearGradient>
 
+              <linearGradient id="frostWhite" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#1a66feff" />
+                <stop offset="50%" stopColor="#dfe3ea" />
+                <stop offset="100%" stopColor="#D8E2F3" />
+              </linearGradient>
+
               <linearGradient id="snowWhite" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#FFFFFF" />
                 <stop offset="100%" stopColor="#F3F6FB" />
               </linearGradient>
             </defs>
 
-            <Tooltip
-              cursor={{ fill: "transparent" }}
-              content={<CustomTooltip />}
-            />
+            <Tooltip cursor={{ fill: "transparent" }} content={<CustomTooltip />} />
 
             <Pie
               data={ringData}
@@ -175,6 +129,7 @@ export default function DonutChartCard({
               strokeWidth={2}
             >
               <Cell fill="url(#icyBlue)" />
+              <Cell fill="url(#frostWhite)" />
               <Cell fill="url(#snowWhite)" />
             </Pie>
           </PieChart>

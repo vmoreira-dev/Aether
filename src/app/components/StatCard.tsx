@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import useCardHoverTilt from "../hooks/useCardHoverTilt";
 
@@ -9,11 +8,7 @@ interface StatCardProps {
   sub?: string;
 }
 
-export default function StatCard({
-  title,
-  value,
-  sub,
-}: StatCardProps) {
+export function StatCard({ title, value, sub }: StatCardProps) {
   const { style, handleMove, handleLeave } = useCardHoverTilt();
 
   return (
@@ -31,6 +26,7 @@ export default function StatCard({
 
         shadow-[0_20px_60px_rgba(0,0,0,0.45)]
         hover:shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+        shadow-black/60
 
         before:content-['']
         before:absolute before:inset-0 before:rounded-2xl
@@ -52,20 +48,14 @@ export default function StatCard({
       <div className="flex flex-col gap-1.5 relative z-10">
         <p
           className="text-[15px] font-semibold tracking-tight text-white/90"
-          style={{
-            fontFamily:
-              "var(--font-jakarta), system-ui, sans-serif",
-          }}
+          style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
         >
           {title}
         </p>
 
         <p
           className="text-4xl font-bold tracking-[-0.01em] leading-none text-white"
-          style={{
-            fontFamily:
-              "var(--font-jakarta), system-ui, sans-serif",
-          }}
+          style={{ fontFamily: "var(--font-jakarta), system-ui, sans-serif" }}
         >
           {value}
         </p>
@@ -74,8 +64,7 @@ export default function StatCard({
           <p
             className="text-sm text-white/70 pt-1"
             style={{
-              fontFamily:
-                "var(--font-jakarta), system-ui, sans-serif",
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
             }}
           >
             {sub}
