@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+
+  <!-- Outer ring (white) -->
+  <circle
+    cx="50"
+    cy="50"
+    r="46"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="7"/>
+
+  <!-- Inner symbol (Aether blue) -->
+  <path
+    fill="#3B82F6"
+    d="
+      M50 25
+      L68 75
+      L56 75
+      L50 53
+      L44 75
+      L32 75
+      Z
+    "/>
+</svg>

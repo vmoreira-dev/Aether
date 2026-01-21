@@ -1,8 +1,8 @@
 import "./globals.css";
 import Sidebar from "./components/Sidebar";
 import { DashboardProvider } from "./context/DashboardContext";
-import { DM_Sans } from "next/font/google";
-import { Geist } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
+import type { Metadata } from "next";
 
 const bodyFont = DM_Sans({
   subsets: ["latin"],
@@ -18,6 +18,17 @@ const displayFont = Geist({
   display: "swap",
 });
 
+/* =========================
+   METADATA (TITLE / ICON)
+   ========================= */
+export const metadata: Metadata = {
+  title: "Aether",
+  description: "Aether analytics dashboard",
+  icons: {
+    icon: "/favicon-aether.svg",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -29,7 +40,7 @@ export default function RootLayout({
       className={`${displayFont.variable} ${bodyFont.variable}`}
     >
       <body className="min-h-screen text-white antialiased font-[var(--font-body)]">
-        
+
         {/* === BACKGROUND === */}
         <div className="fixed inset-0 -z-10">
           <img
@@ -41,7 +52,7 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-gradient-to-br from-[#05070f]/70 via-[#0b1230]/40 to-[#05070f]/80" />
         </div>
 
-        {/* === APP FRAME (PROVIDER MUST WRAP THIS) === */}
+        {/* === APP FRAME === */}
         <DashboardProvider>
           <div className="flex min-h-screen">
             <Sidebar />
