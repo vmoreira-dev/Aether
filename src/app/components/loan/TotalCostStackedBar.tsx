@@ -15,8 +15,8 @@ import { useLoan } from "../../providers/LoanContext";
    HELPERS
    ========================= */
 
-function formatMoney(n: number) {
-  return `$${Math.round(n).toLocaleString()}`;
+function formatPercent(v: number) {
+  return `${Math.round(v)}%`;
 }
 
 function CustomTooltip({ active, payload }: any) {
@@ -25,11 +25,12 @@ function CustomTooltip({ active, payload }: any) {
   return (
     <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs pointer-events-none">
       <div className="opacity-70 mb-1">{payload[0].payload.label}</div>
+
       {payload.map((p: any) => (
         <div key={p.dataKey} className="flex justify-between gap-4">
           <span className="opacity-70">{p.name}</span>
           <span className="text-white font-semibold">
-            {formatMoney(p.value)}
+            {formatPercent(p.value)}
           </span>
         </div>
       ))}
@@ -41,14 +42,12 @@ function CustomTooltip({ active, payload }: any) {
    COMPONENT
    ========================= */
 
-export default function TotalCostStackedBar() {
+export default function PaymentShareStackedBar() {
   const { model } = useLoan();
 
   const principal = model.vehiclePrice - model.downPayment;
   const months = model.termMonths;
   const rate = model.apr / 100 / 12;
-
-  let balance = principal;
 
   const payment =
     rate === 0
@@ -56,7 +55,9 @@ export default function TotalCostStackedBar() {
       : (principal * rate * Math.pow(1 + rate, months)) /
         (Math.pow(1 + rate, months) - 1);
 
-  // ---- 6-MONTH BUCKETS ----
+  let balance = principal;
+
+  // ---- SNAPSHOT EVERY 6 MONTHS ----
   const data: {
     label: string;
     Principal: number;
@@ -68,19 +69,16 @@ export default function TotalCostStackedBar() {
     const principalPaid = payment - interest;
     balance -= principalPaid;
 
-    const i = Math.floor((m - 1) / 6);
+    if (m % 6 === 0 || m === months) {
+      const interestPct = (interest / payment) * 100;
+      const principalPct = 100 - interestPct;
 
-    if (!data[i]) {
-      data[i] = {
-        label: `M${Math.min((i + 1) * 6, months)}`
-,
-        Principal: 0,
-        Interest: 0,
-      };
+      data.push({
+        label: `Month ${m}`,
+        Principal: principalPct,
+        Interest: interestPct,
+      });
     }
-
-    data[i].Principal += principalPaid;
-    data[i].Interest += interest;
   }
 
   return (
@@ -98,32 +96,27 @@ export default function TotalCostStackedBar() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
 
       <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90 mb-3">
-        Payment Breakdown (6-Month)
+        Payment Composition (Principal vs Interest)
       </p>
 
       <div className="w-full h-[240px]">
         <ResponsiveContainer>
-          <BarChart
-            data={data}
-            barCategoryGap={28}
-            barGap={6}
-          >
-                    <defs>
-                {/* Principal — darker glassy blue */}
-                <linearGradient id="principalBar" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#E6EEFF" stopOpacity={0.95} />
-                    <stop offset="30%" stopColor="#9FBFFF" stopOpacity={0.9} />
-                    <stop offset="65%" stopColor="#6F97E8" stopOpacity={0.85} />
-                    <stop offset="100%" stopColor="#3F67C6" stopOpacity={0.55} />
-                </linearGradient>
+          <BarChart data={data} barCategoryGap={28} barGap={6}>
+            <defs>
+              {/* Principal — dominant glassy blue */}
+              <linearGradient id="principalBar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E6EEFF" stopOpacity={0.95} />
+                <stop offset="35%" stopColor="#9FBFFF" stopOpacity={0.9} />
+                <stop offset="70%" stopColor="#6F97E8" stopOpacity={0.85} />
+                <stop offset="100%" stopColor="#3F67C6" stopOpacity={0.55} />
+              </linearGradient>
 
-                {/* Interest — slightly muted so blue dominates */}
-                <linearGradient id="interestBar" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#FFDDB0" stopOpacity={0.8} />
-                    <stop offset="100%" stopColor="#FFDDB0" stopOpacity={0.25} />
-                </linearGradient>
-                </defs>
-
+              {/* Interest — subdued accent */}
+              <linearGradient id="interestBar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FFDDB0" stopOpacity={0.75} />
+                <stop offset="100%" stopColor="#FFDDB0" stopOpacity={0.25} />
+              </linearGradient>
+            </defs>
 
             <CartesianGrid
               stroke="rgba(255,255,255,0.10)"
@@ -138,15 +131,16 @@ export default function TotalCostStackedBar() {
             />
 
             <YAxis
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `$${v / 1000}k`}
+              tickFormatter={(v) => `${v}%`}
               tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
             />
 
             <Tooltip content={<CustomTooltip />} cursor={false} />
 
-            {/* IMPORTANT: explicit barSize */}
             <Bar
               dataKey="Principal"
               stackId="a"

@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import useCardHoverTilt from "../../hooks/useCardHoverTilt";
+
 import { useLoan } from "../../providers/LoanContext";
 
 /* =========================
@@ -52,7 +52,7 @@ function CustomTooltip({ active, payload }: any) {
 
 export default function LoanPrincipalInterestChart() {
   const loan = useLoan();
-  const { style, handleMove, handleLeave } = useCardHoverTilt(300);
+
 
   // 🔒 HARD GUARD — prevents silent crash
   if (
@@ -104,9 +104,7 @@ export default function LoanPrincipalInterestChart() {
 
   return (
     <div
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={style}
+      
       className="
         relative rounded-2xl border border-white/25
         bg-white/[0.08] backdrop-blur-2xl

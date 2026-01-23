@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import useCardHoverTilt from "../../hooks/useCardHoverTilt";
 import { useLoan } from "../../providers/LoanContext";
 
 /* =========================
@@ -36,17 +35,11 @@ function CustomTooltip({ active, payload }: any) {
   return (
     <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs pointer-events-none">
       <div className="opacity-70">Month {d.month}</div>
-      <div className="text-white">
-        Principal:{" "}
-        <span className="font-semibold">
-          {formatMoney(d.principal)}
-        </span>
+      <div className="text-white font-semibold">
+        Principal paid: {formatMoney(d.principal)}
       </div>
       <div className="text-white/80">
-        Interest:{" "}
-        <span className="font-semibold">
-          {formatMoney(d.interest)}
-        </span>
+        Interest paid: {formatMoney(d.interest)}
       </div>
     </div>
   );
@@ -57,78 +50,64 @@ function CustomTooltip({ active, payload }: any) {
    ========================= */
 
 export default function LoanPrincipalInterestChart() {
-  const { model } = useLoan();
-  const { style, handleMove, handleLeave } = useCardHoverTilt(300);
+  const loan = useLoan();
+
+  if (
+    !loan ||
+    !loan.model ||
+    !loan.derived ||
+    loan.derived.loanAmount == null ||
+    loan.derived.monthlyPayment == null
+  ) {
+    return (
+      <div className="rounded-2xl border border-white/20 bg-white/[0.05] px-8 py-6 text-white/70">
+        Principal vs Interest chart waiting for loan data…
+      </div>
+    );
+  }
+
+  const { model, derived } = loan;
 
   const chartData = useMemo(() => {
-    const principalTotal =
-      model.vehiclePrice - model.downPayment;
-    if (principalTotal <= 0) return [];
-
+    const principalTotal = derived.loanAmount;
     const monthlyRate = model.apr / 100 / 12;
-    const n = model.termMonths;
+    const payment = derived.monthlyPayment;
 
-    const payment =
-      monthlyRate === 0
-        ? principalTotal / n
-        : (principalTotal *
-            monthlyRate *
-            Math.pow(1 + monthlyRate, n)) /
-          (Math.pow(1 + monthlyRate, n) - 1);
-
-    let balance = principalTotal;
+    let remaining = principalTotal;
     let cumulativePrincipal = 0;
     let cumulativeInterest = 0;
 
-    const data: {
-      month: number;
-      principal: number;
-      interest: number;
-    }[] = [];
-
-    for (let month = 0; month <= n; month++) {
-      if (month === 0) {
-        data.push({
-          month,
+    return Array.from({ length: model.termMonths + 1 }).map((_, i) => {
+      if (i === 0) {
+        return {
+          month: 0,
           principal: 0,
           interest: 0,
-        });
-        continue;
+        };
       }
 
-      const interestPaid = balance * monthlyRate;
-      const principalPaid = payment - interestPaid;
+      const interestForMonth = remaining * monthlyRate;
+      const principalForMonth = payment - interestForMonth;
 
-      balance -= principalPaid;
-      cumulativePrincipal += principalPaid;
-      cumulativeInterest += interestPaid;
+      remaining = Math.max(remaining - principalForMonth, 0);
+      cumulativePrincipal += principalForMonth;
+      cumulativeInterest += interestForMonth;
 
-      data.push({
-        month,
+      return {
+        month: i,
         principal: Math.round(cumulativePrincipal),
         interest: Math.round(cumulativeInterest),
-      });
-    }
-
-    return data;
-  }, [model]);
-
-  const totalMonths = chartData.length - 1;
+      };
+    });
+  }, [model, derived]);
 
   return (
     <div
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={style}
       className="
         relative rounded-2xl border border-white/25
         bg-white/[0.08] backdrop-blur-2xl
         shadow-[0_25px_80px_rgba(0,0,0,0.55)]
-        before:absolute before:inset-0 before:rounded-2xl
-        before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
         px-8 pt-6 pb-5
-        transition-all duration-300
-        ease-[cubic-bezier(.16,1,.3,1)]
       "
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -139,48 +118,16 @@ export default function LoanPrincipalInterestChart() {
 
       <div className="w-full h-[260px]">
         <ResponsiveContainer>
-          <AreaChart
-            data={chartData}
-            margin={{ top: 8, right: 8, left: 0, bottom: 28 }}
-          >
-
+          <AreaChart data={chartData} margin={{ top: 8, right: 8, bottom: 28 }}>
             <defs>
-              <linearGradient
-                id="principalFill"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop
-                  offset="0%"
-                  stopColor="#9FBFFF"
-                  stopOpacity={0.85}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="#9FBFFF"
-                  stopOpacity={0.05}
-                />
+              <linearGradient id="principalFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#9FBFFF" stopOpacity={0.85} />
+                <stop offset="100%" stopColor="#9FBFFF" stopOpacity={0.05} />
               </linearGradient>
 
-              <linearGradient
-                id="interestFill"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop
-                  offset="0%"
-                  stopColor="#FFD6A5"
-                  stopOpacity={0.75}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="#FFD6A5"
-                  stopOpacity={0.05}
-                />
+              <linearGradient id="interestFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E6EEFF" stopOpacity={0.55} />
+                <stop offset="100%" stopColor="#E6EEFF" stopOpacity={0.05} />
               </linearGradient>
             </defs>
 
@@ -190,43 +137,35 @@ export default function LoanPrincipalInterestChart() {
             />
 
             <XAxis
-  dataKey="month"
-  interval={0}
-  height={32}
-  padding={{ left: 24, right: 24 }}
-  tickFormatter={(m) => formatMonthTick(m, totalMonths)}
-  axisLine={false}
-  tickLine={false}
-  tick={{
-    fill: "rgba(255,255,255,0.75)",
-    fontSize: 12,
-  }}
-/>
-
+              dataKey="month"
+              height={32}
+              axisLine={false}
+              tickLine={false}
+              padding={{ left: 24, right: 24 }}
+              tickFormatter={(m) =>
+                formatMonthTick(m, model.termMonths)
+              }
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
+            />
 
             <YAxis
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `$${v / 1000}k`}
-              tick={{
-                fill: "rgba(255,255,255,0.75)",
-                fontSize: 12,
-              }}
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
             />
 
             <Tooltip content={<CustomTooltip />} />
 
             <Area
-              stackId="1"
               type="monotone"
               dataKey="interest"
-              stroke="#ffffff"
+              stroke="#FFFFFF"
               fill="url(#interestFill)"
               strokeWidth={2}
             />
 
             <Area
-              stackId="1"
               type="monotone"
               dataKey="principal"
               stroke="#9FBFFF"

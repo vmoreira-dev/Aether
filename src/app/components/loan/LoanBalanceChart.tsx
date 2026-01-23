@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import useCardHoverTilt from "../../hooks/useCardHoverTilt";
+
 import { useLoan } from "../../providers/LoanContext";
 
 /* =========================
@@ -49,7 +49,6 @@ function CustomTooltip({ active, payload }: any) {
 
 export default function LoanBalanceChart() {
   const { model } = useLoan();
-  const { style, handleMove, handleLeave } = useCardHoverTilt(300);
 
   /**
    * Build amortization balance curve
@@ -84,9 +83,7 @@ export default function LoanBalanceChart() {
 
   return (
     <div
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={style}
+     
       className="
         relative rounded-2xl border border-white/25
         bg-white/[0.08] backdrop-blur-2xl

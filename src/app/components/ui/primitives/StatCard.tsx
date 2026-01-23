@@ -1,37 +1,31 @@
 "use client";
 
 import React from "react";
-import useCardHoverTilt from "../../../hooks/useCardHoverTilt";
 
 interface StatCardProps {
   title: string;
   value: string | number;
   sub?: string;
-  enableTilt?: boolean;
+  className?: string;
 }
 
 export function StatCard({
   title,
   value,
   sub,
-  enableTilt = true,
+  className = "",
 }: StatCardProps) {
-  const tilt = useCardHoverTilt();
-
   return (
     <div
-      onMouseMove={enableTilt ? tilt.handleMove : undefined}
-      onMouseLeave={enableTilt ? tilt.handleLeave : undefined}
-      style={enableTilt ? tilt.style : undefined}
-      className="
+      className={`
         relative rounded-2xl border border-white/25
         bg-white/[0.08] backdrop-blur-2xl
         shadow-[0_20px_60px_rgba(0,0,0,0.45)]
-        hover:shadow-[0_25px_80px_rgba(0,0,0,0.55)]
         transition-all duration-300
         ease-[cubic-bezier(.16,1,.3,1)]
         px-7 py-6
-      "
+        ${className}
+      `}
     >
       {/* top chrome */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
