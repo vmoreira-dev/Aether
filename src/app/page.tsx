@@ -3,6 +3,7 @@
 import LoanStatCards from "./components/loan/LoanStats";
 import LoanBalanceChart from "./components/loan/LoanBalanceChart";
 import  LoanInputs  from "./components/loan/LoanInputs";
+import LoanPrincipalInterestChart from "./components/loan/LoanPrincipalInterestChart";
 
 export default function Page() {
   return (
@@ -17,7 +18,10 @@ export default function Page() {
       {/* === BALANCE OVER TIME === */}
       <LoanBalanceChart />
 
-     
+      {/* === PRINCIPAL VS INTEREST === */}
+      <LoanPrincipalInterestChart />
+
+          
       
     </div>
   );
