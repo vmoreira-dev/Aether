@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,11 +11,8 @@ import {
   CartesianGrid,
   Cell,
 } from "recharts";
-import useCardHoverTilt from "../hooks/useCardHoverTilt";
+import useCardHoverTilt from "../../../../hooks/useCardHoverTilt";
 
-type BarChartCardProps = {
-  data: number[];
-};
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
@@ -24,21 +21,28 @@ function CustomTooltip({ active, payload }: any) {
     <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs">
       <div className="opacity-70">{payload[0].payload.name}</div>
       <div className="text-sm font-semibold text-white">
-        ${payload[0].value}
+        ${payload[0].value.toLocaleString()}
       </div>
     </div>
   );
 }
 
-export default function BarChartCard({ data }: BarChartCardProps) {
+const MONTHS = [
+  "Jan","Feb","Mar","Apr","May","Jun",
+  "Jul","Aug","Sep","Oct","Nov","Dec",
+];
+
+export default function BarChartCard() {
+  const { data } = useDashboard();
   const { style, handleMove, handleLeave } = useCardHoverTilt(320);
   const [hovered, setHovered] = useState<number | null>(null);
 
-  // transform raw numbers → recharts format
-  const chartData = data.map((value, i) => ({
-    name: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i] ?? `M${i + 1}`,
-    value,
-  }));
+  const chartData = useMemo(() => {
+    return data.monthlySpending.map((value, i) => ({
+      name: MONTHS[i] ?? `M${i + 1}`,
+      value,
+    }));
+  }, [data.monthlySpending]);
 
   return (
     <div
@@ -66,7 +70,10 @@ export default function BarChartCard({ data }: BarChartCardProps) {
       <div className="h-[240px] w-full">
         <ResponsiveContainer>
           <BarChart data={chartData} barSize={32}>
-            <CartesianGrid stroke="rgba(255,255,255,0.12)" vertical={false} />
+            <CartesianGrid
+              stroke="rgba(255,255,255,0.12)"
+              vertical={false}
+            />
 
             <XAxis
               dataKey="name"
@@ -98,7 +105,11 @@ export default function BarChartCard({ data }: BarChartCardProps) {
               {chartData.map((_, i) => (
                 <Cell
                   key={i}
-                  fill={i === hovered ? "url(#barHover)" : "url(#barFill)"}
+                  fill={
+                    i === hovered
+                      ? "url(#barHover)"
+                      : "url(#barFill)"
+                  }
                 />
               ))}
             </Bar>

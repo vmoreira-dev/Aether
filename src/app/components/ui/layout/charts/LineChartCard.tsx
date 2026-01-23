@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,25 +11,27 @@ import {
   CartesianGrid,
 } from "recharts";
 
-type LineChartCardProps = {
-  data: number[];
-};
 
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
 
   return (
     <div className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs pointer-events-none">
-      <div className="opacity-70">Point {payload[0].payload.day}</div>
+      <div className="opacity-70">
+        Point {payload[0].payload.day}
+      </div>
       <div className="text-sm font-semibold text-white">
-        ${payload[0].value}
+        ${payload[0].value.toLocaleString()}
       </div>
     </div>
   );
 }
 
-export default function LineChartCard({ data }: LineChartCardProps) {
-  const [style, setStyle] = useState<React.CSSProperties>({ height: 300 });
+export default function LineChartCard() {
+  const { data } = useDashboard();
+  const [style, setStyle] = useState<React.CSSProperties>({
+    height: 300,
+  });
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -49,11 +51,12 @@ export default function LineChartCard({ data }: LineChartCardProps) {
     });
   }
 
-  // transform raw numbers → recharts format
-  const chartData = data.map((value, i) => ({
-    day: i + 1,
-    value,
-  }));
+  const chartData = useMemo(() => {
+    return data.trend.map((value, i) => ({
+      day: i + 1,
+      value,
+    }));
+  }, [data.trend]);
 
   return (
     <div
@@ -80,7 +83,13 @@ export default function LineChartCard({ data }: LineChartCardProps) {
         <ResponsiveContainer>
           <LineChart data={chartData}>
             <defs>
-              <linearGradient id="aetherLine" x1="0" y1="0" x2="1" y2="0">
+              <linearGradient
+                id="aetherLine"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="0"
+              >
                 <stop offset="0%" stopColor="#9FBFFF">
                   <animate
                     attributeName="offset"
@@ -110,23 +119,35 @@ export default function LineChartCard({ data }: LineChartCardProps) {
               </linearGradient>
             </defs>
 
-            <CartesianGrid stroke="rgba(255,255,255,0.10)" vertical={false} />
+            <CartesianGrid
+              stroke="rgba(255,255,255,0.10)"
+              vertical={false}
+            />
 
             <XAxis
               dataKey="day"
-              tick={{ fill: "rgba(255,255,255,0.80)", fontSize: 12 }}
+              tick={{
+                fill: "rgba(255,255,255,0.80)",
+                fontSize: 12,
+              }}
               axisLine={false}
               tickLine={false}
             />
 
             <YAxis
-              tick={{ fill: "rgba(255,255,255,0.80)", fontSize: 12 }}
+              tick={{
+                fill: "rgba(255,255,255,0.80)",
+                fontSize: 12,
+              }}
               axisLine={false}
               tickLine={false}
             />
 
             <Tooltip
-              cursor={{ stroke: "rgba(255,255,255,0.22)", strokeWidth: 1 }}
+              cursor={{
+                stroke: "rgba(255,255,255,0.22)",
+                strokeWidth: 1,
+              }}
               content={<CustomTooltip />}
             />
 

@@ -1,6 +1,6 @@
 import "./globals.css";
 import Sidebar from "./components/Sidebar";
-import { DashboardProvider } from "./context/DashboardContext";
+import { LoanProvider } from "./providers/LoanContext";
 import { DM_Sans, Geist } from "next/font/google";
 import type { Metadata } from "next";
 
@@ -18,12 +18,9 @@ const displayFont = Geist({
   display: "swap",
 });
 
-/* =========================
-   METADATA (TITLE / ICON)
-   ========================= */
 export const metadata: Metadata = {
   title: "Aether",
-  description: "Aether analytics dashboard",
+  description: "Loan simulation dashboard",
   icons: {
     icon: "/favicon-aether.svg",
   },
@@ -40,7 +37,6 @@ export default function RootLayout({
       className={`${displayFont.variable} ${bodyFont.variable}`}
     >
       <body className="min-h-screen text-white antialiased font-[var(--font-body)]">
-
         {/* === BACKGROUND === */}
         <div className="fixed inset-0 -z-10">
           <img
@@ -53,15 +49,14 @@ export default function RootLayout({
         </div>
 
         {/* === APP FRAME === */}
-        <DashboardProvider>
+        <LoanProvider>
           <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 flex justify-center items-start">
               {children}
             </main>
           </div>
-        </DashboardProvider>
-
+        </LoanProvider>
       </body>
     </html>
   );

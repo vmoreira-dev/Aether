@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -9,11 +9,16 @@ import {
   Tooltip,
 } from "recharts";
 
-const ringData = [
-  { name: "A", value: 40 },
-  { name: "B", value: 35 },
-  { name: "C", value: 25 },
-];
+
+function formatMoney(n: number) {
+  return `$${n.toLocaleString()}`;
+}
+
+const COLOR_BY_CATEGORY: Record<string, string> = {
+  cars: "url(#icyBlue)",
+  food: "url(#frostWhite)",
+  travel: "url(#snowWhite)",
+};
 
 function CustomTooltip({ active, payload, chartX, chartY }: any) {
   if (!active || !payload?.length) return null;
@@ -30,16 +35,31 @@ function CustomTooltip({ active, payload, chartX, chartY }: any) {
       }}
       className="px-3 py-2 rounded-2xl bg-black/80 backdrop-blur-md border border-white/15 text-xs"
     >
-      <div className="opacity-70">{d.name}</div>
+      <div className="opacity-70 capitalize">{d.name}</div>
       <div className="text-sm font-semibold text-white">
-        {d.value}%
+        {d.percent}% · {formatMoney(d.amount)}
       </div>
     </div>
   );
 }
 
 export default function DonutChartCard() {
-  const [style, setStyle] = useState<React.CSSProperties>({ height: 320 });
+  const { model, data } = useDashboard();
+  const [style, setStyle] = useState<React.CSSProperties>({
+    height: 320,
+  });
+
+  const ringData = useMemo(() => {
+    return Object.entries(model.distribution).map(
+      ([key, pct]) => ({
+        name: key,
+        percent: Math.round(pct * 100),
+        value: Math.round(pct * 100),
+        amount: Math.round(data.totalSpend * pct),
+        fill: COLOR_BY_CATEGORY[key],
+      })
+    );
+  }, [model.distribution, data.totalSpend]);
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -83,11 +103,11 @@ export default function DonutChartCard() {
       <div className="flex-1 w-full relative">
         {/* CENTER LABEL */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10 text-center">
-          <p className="text-[11px] tracking-[0.18em] text-white/70">
-            TOTAL
+          <p className="text-[11px] tracking-[0.18em] text-white/60">
+            ANNUAL TOTAL
           </p>
-          <p className="text-3xl font-bold tracking-tight text-white mt-1">
-            100%
+          <p className="text-2xl font-semibold tracking-tight text-white/90 mt-1">
+            {formatMoney(data.totalSpend)}
           </p>
         </div>
 
@@ -112,7 +132,10 @@ export default function DonutChartCard() {
               </linearGradient>
             </defs>
 
-            <Tooltip cursor={{ fill: "transparent" }} content={<CustomTooltip />} />
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={<CustomTooltip />}
+            />
 
             <Pie
               data={ringData}
@@ -128,12 +151,29 @@ export default function DonutChartCard() {
               stroke="rgba(255,255,255,0.45)"
               strokeWidth={2}
             >
-              <Cell fill="url(#icyBlue)" />
-              <Cell fill="url(#frostWhite)" />
-              <Cell fill="url(#snowWhite)" />
+              {ringData.map((d) => (
+                <Cell key={d.name} fill={d.fill} />
+              ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
+      </div>
+
+      {/* LEGEND */}
+      <div className="mt-4 grid grid-cols-3 gap-3 text-xs text-white/75">
+        {ringData.map((d) => (
+          <div
+            key={d.name}
+            className="flex flex-col items-center"
+          >
+            <span className="uppercase tracking-wide opacity-60">
+              {d.name}
+            </span>
+            <span className="font-medium">
+              {formatMoney(d.amount)}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
