@@ -8,7 +8,9 @@ import LoanPrincipalInterestChart from "./components/loan/LoanPrincipalInterestC
 export default function Page() {
   return (
     <div className="max-w-6xl w-full px-6 pt-[20vh] pb-24 space-y-8">
-      <LoanInputs />
+      <div className="-mt-40">
+  <LoanInputs />
+</div>
 
       {/* === STATS === */}
       <div className="grid grid-cols-3 gap-6">

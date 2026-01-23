@@ -10,9 +10,23 @@ export default function LoanInputs() {
   const { model, setModel, reset } = useLoan();
 
   return (
-    <div className="rounded-2xl border border-white/25 bg-white/[0.08] px-8 pt-6 pb-7">
-      <div className="flex items-center justify-between mb-6">
-        <p className="text-white/90 text-lg">Loan Inputs</p>
+    <div
+      className="
+        relative rounded-2xl border border-white/25
+        bg-white/[0.08] backdrop-blur-2xl
+        shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+        before:pointer-events-none
+        before:absolute before:inset-0 before:rounded-2xl
+        before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
+        px-8 pt-5 pb-7
+      "
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+
+      <div className="flex items-center justify-between mb-4">
+        <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90">
+          Loan Inputs
+        </p>
         <GhostButton onClick={reset}>Reset</GhostButton>
       </div>
 
@@ -52,9 +66,9 @@ export default function LoanInputs() {
                 key={m}
                 type="button"
                 onClick={() => setModel({ termMonths: m })}
-                className={`px-3 py-1 text-xs rounded-md border ${
+                className={`px-3 py-1 text-xs rounded-md border transition-colors ${
                   model.termMonths === m
-                    ? "bg-white/20 border-white/40"
+                    ? "bg-white/15 border-white/35"
                     : "bg-white/5 border-white/20"
                 }`}
               >

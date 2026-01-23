@@ -1,5 +1,5 @@
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
+
 import { LoanProvider } from "./providers/LoanContext";
 import { DM_Sans, Geist } from "next/font/google";
 import type { Metadata } from "next";
@@ -51,7 +51,7 @@ export default function RootLayout({
         {/* === APP FRAME === */}
         <LoanProvider>
           <div className="flex min-h-screen">
-            <Sidebar />
+            
             <main className="flex-1 flex justify-center items-start">
               {children}
             </main>
