@@ -139,7 +139,11 @@ export default function LoanPrincipalInterestChart() {
 
       <div className="w-full h-[260px]">
         <ResponsiveContainer>
-          <AreaChart data={chartData}>
+          <AreaChart
+            data={chartData}
+            margin={{ top: 8, right: 8, left: 0, bottom: 28 }}
+          >
+
             <defs>
               <linearGradient
                 id="principalFill"
@@ -186,19 +190,19 @@ export default function LoanPrincipalInterestChart() {
             />
 
             <XAxis
-              dataKey="month"
-              interval={0}
-              padding={{ left: 24, right: 24 }}
-              tickFormatter={(m) =>
-                formatMonthTick(m, totalMonths)
-              }
-              axisLine={false}
-              tickLine={false}
-              tick={{
-                fill: "rgba(255,255,255,0.75)",
-                fontSize: 12,
-              }}
-            />
+  dataKey="month"
+  interval={0}
+  height={32}
+  padding={{ left: 24, right: 24 }}
+  tickFormatter={(m) => formatMonthTick(m, totalMonths)}
+  axisLine={false}
+  tickLine={false}
+  tick={{
+    fill: "rgba(255,255,255,0.75)",
+    fontSize: 12,
+  }}
+/>
+
 
             <YAxis
               axisLine={false}
@@ -216,7 +220,7 @@ export default function LoanPrincipalInterestChart() {
               stackId="1"
               type="monotone"
               dataKey="interest"
-              stroke="#FFD6A5"
+              stroke="#ffffff"
               fill="url(#interestFill)"
               strokeWidth={2}
             />

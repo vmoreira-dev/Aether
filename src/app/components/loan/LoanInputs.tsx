@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLoan } from "../../providers/LoanContext";
 import { InputField } from "../ui/primitives/InputField";
 import { GhostButton } from "../ui/primitives/GhostButton";
@@ -8,6 +9,14 @@ const TERM_PRESETS = [36, 48, 60, 72, 84];
 
 export default function LoanInputs() {
   const { model, setModel, reset } = useLoan();
+
+  // local draft state to allow free typing
+  const [termDraft, setTermDraft] = useState(String(model.termMonths));
+
+  // keep draft in sync when buttons/reset change the model
+  useEffect(() => {
+    setTermDraft(String(model.termMonths));
+  }, [model.termMonths]);
 
   return (
     <div
@@ -18,7 +27,7 @@ export default function LoanInputs() {
         before:pointer-events-none
         before:absolute before:inset-0 before:rounded-2xl
         before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
-        px-8 pt-5 pb-7
+        px-8 pt-5 pb-7 
       "
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -53,30 +62,33 @@ export default function LoanInputs() {
           onChange={(v) => setModel({ apr: v })}
         />
 
-        <div>
-          <InputField
+       <div>
+        <InputField
             label="Term (months)"
             value={model.termMonths}
-            onChange={(v) => setModel({ termMonths: v })}
+            readOnly
+            onChange={() => {}}
+            className="cursor-default"
           />
 
-          <div className="flex gap-2 mt-2">
-            {TERM_PRESETS.map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setModel({ termMonths: m })}
-                className={`px-3 py-1 text-xs rounded-md border transition-colors ${
-                  model.termMonths === m
-                    ? "bg-white/15 border-white/35"
-                    : "bg-white/5 border-white/20"
-                }`}
-              >
-                {m} mo
-              </button>
-            ))}
-          </div>
+        <div className="flex gap-2 mt-2">
+          {TERM_PRESETS.map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setModel({ termMonths: m })}
+              className={`px-3 py-1 text-xs rounded-md border transition-colors ${
+                model.termMonths === m
+                  ? "bg-white/15 border-white/35"
+                  : "bg-white/5 border-white/20 hover:bg-white/10"
+              }`}
+            >
+              {m} mo
+            </button>
+          ))}
         </div>
+      </div>
+
       </div>
     </div>
   );

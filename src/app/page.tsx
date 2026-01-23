@@ -1,7 +1,7 @@
 "use client";
 
 import LoanStatCards from "./components/loan/LoanStats";
-import LoanBalanceChart from "./components/loan/LoanBalanceChart";
+import TotalCostStackedBar from "./components/loan/TotalCostStackedBar";
 import  LoanInputs  from "./components/loan/LoanInputs";
 import LoanPrincipalInterestChart from "./components/loan/LoanPrincipalInterestChart";
 
@@ -18,7 +18,8 @@ export default function Page() {
       </div>
 
       {/* === BALANCE OVER TIME === */}
-      <LoanBalanceChart />
+      <TotalCostStackedBar />
+
 
       {/* === PRINCIPAL VS INTEREST === */}
       <LoanPrincipalInterestChart />
