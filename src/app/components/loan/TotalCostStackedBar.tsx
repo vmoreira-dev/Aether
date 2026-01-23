@@ -57,7 +57,6 @@ export default function PaymentShareStackedBar() {
 
   let balance = principal;
 
-  // ---- SNAPSHOT EVERY 6 MONTHS ----
   const data: {
     label: string;
     Principal: number;
@@ -82,17 +81,7 @@ export default function PaymentShareStackedBar() {
   }
 
   return (
-    <div
-      className="
-        relative rounded-2xl border border-white/25
-        bg-white/[0.08] backdrop-blur-2xl
-        shadow-[0_25px_80px_rgba(0,0,0,0.55)]
-        before:pointer-events-none
-        before:absolute before:inset-0 before:rounded-2xl
-        before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]
-        px-8 pt-5 pb-6
-      "
-    >
+    <div className="relative rounded-2xl border border-white/25 bg-white/[0.08] backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.55)] px-8 pt-5 pb-6 before:pointer-events-none before:absolute before:inset-0 before:rounded-2xl before:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
 
       <p className="font-[DMSerifDisplay] text-[17px] tracking-tight text-white/90 mb-3">
@@ -103,7 +92,6 @@ export default function PaymentShareStackedBar() {
         <ResponsiveContainer>
           <BarChart data={data} barCategoryGap={28} barGap={6}>
             <defs>
-              {/* Principal — dominant glassy blue */}
               <linearGradient id="principalBar" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#E6EEFF" stopOpacity={0.95} />
                 <stop offset="35%" stopColor="#9FBFFF" stopOpacity={0.9} />
@@ -111,17 +99,13 @@ export default function PaymentShareStackedBar() {
                 <stop offset="100%" stopColor="#3F67C6" stopOpacity={0.55} />
               </linearGradient>
 
-              {/* Interest — subdued accent */}
               <linearGradient id="interestBar" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#FFDDB0" stopOpacity={0.75} />
                 <stop offset="100%" stopColor="#FFDDB0" stopOpacity={0.25} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid
-              stroke="rgba(255,255,255,0.10)"
-              vertical={false}
-            />
+            <CartesianGrid stroke="rgba(255,255,255,0.10)" vertical={false} />
 
             <XAxis
               dataKey="label"

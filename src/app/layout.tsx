@@ -52,7 +52,9 @@ export default function RootLayout({
         <LoanProvider>
           <div className="flex min-h-screen">
             
-            <main className="flex-1 flex justify-center items-start">
+            <main className="flex-1 flex justify-center items-start pt-0 mt-0">
+
+
               {children}
             </main>
           </div>
