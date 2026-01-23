@@ -1,15 +1,20 @@
 "use client";
 
-type InputFieldProps = {
+import React from "react";
+
+interface InputFieldProps {
   label: string;
-  value: number;
+  value: number | string;
   onChange: (value: number) => void;
+
   prefix?: string;
   suffix?: string;
   step?: number;
-  min?: number;
-  max?: number;
-};
+
+  className?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
+}
 
 export function InputField({
   label,
@@ -18,16 +23,21 @@ export function InputField({
   prefix,
   suffix,
   step,
-  min,
-  max,
+  className = "",
+  readOnly = false,
+  disabled = false,
 }: InputFieldProps) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-xs text-white/70">{label}</label>
+    <label className="block">
+      <span className="block mb-1 text-xs text-white/70">{label}</span>
 
-      <div className="relative">
+      <div
+        className={`relative flex items-center rounded-xl border border-white/20 bg-white/[0.06] backdrop-blur-xl px-3 py-2 ${
+          readOnly || disabled ? "opacity-70" : ""
+        }`}
+      >
         {prefix && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 text-sm">
+          <span className="mr-1 text-sm text-white/60 select-none">
             {prefix}
           </span>
         )}
@@ -36,24 +46,22 @@ export function InputField({
           type="number"
           value={value}
           step={step}
-          min={min}
-          max={max}
+          readOnly={readOnly}
+          disabled={disabled}
           onChange={(e) => onChange(Number(e.target.value))}
           className={`
-            w-full rounded-lg bg-white/5 border border-white/20
-            px-3 py-2 text-sm text-white
-            focus:outline-none focus:border-white/40
-            ${prefix ? "pl-7" : ""}
-            ${suffix ? "pr-8" : ""}
+            w-full bg-transparent text-sm text-white outline-none
+            ${readOnly ? "cursor-default" : ""}
+            ${className}
           `}
         />
 
         {suffix && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-sm">
+          <span className="ml-1 text-sm text-white/60 select-none">
             {suffix}
           </span>
         )}
       </div>
-    </div>
+    </label>
   );
 }
