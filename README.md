@@ -1,6 +1,6 @@
 # Aether
 
-![Aether — Financial Dashboard](./public/assets/aether_5_4.webp)
+![Aether — Financial Dashboard](./public/assets/aether_5_4.png)
 
 
 ---
