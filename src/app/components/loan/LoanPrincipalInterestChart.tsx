@@ -20,13 +20,6 @@ function formatMoney(n: number) {
   return `$${Math.round(n).toLocaleString()}`;
 }
 
-function formatMonthTick(month: number, totalMonths: number) {
-  if (month === 0) return "Start";
-  if (month === totalMonths) return "End";
-  if (month % 12 === 0) return `${month / 12}y`;
-  return "";
-}
-
 function CustomTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null;
 
@@ -97,6 +90,14 @@ export default function LoanPrincipalInterestChart() {
     });
   }, [model, derived]);
 
+  const yearTicks = useMemo(() => {
+    const ticks: number[] = [];
+    for (let m = 12; m <= model.termMonths; m += 12) {
+      ticks.push(m);
+    }
+    return ticks;
+  }, [model.termMonths]);
+
   return (
     <div className="relative rounded-2xl border border-white/25 bg-white/[0.08] backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.55)] px-8 pt-6 pb-5">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -124,11 +125,11 @@ export default function LoanPrincipalInterestChart() {
 
             <XAxis
               dataKey="month"
-              height={32}
+              ticks={yearTicks}
               axisLine={false}
               tickLine={false}
               padding={{ left: 12, right: 12 }}
-              tickFormatter={(m) => formatMonthTick(m, model.termMonths)}
+              tickFormatter={(m) => `${m / 12}y`}
               tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
             />
 
