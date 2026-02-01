@@ -8,9 +8,9 @@
 
 ## Overview
 
-Aether is a personal finance dashboard focused on isolating signal from financial data.
+Aether models car loan scenarios and long-term financing costs.
 
-[Live Demo](https://aether.vmoreira.dev)
+**[Live Demo](https://aether.vmoreira.dev)**
 
 
 ---
